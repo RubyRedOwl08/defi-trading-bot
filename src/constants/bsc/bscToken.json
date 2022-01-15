@@ -1,0 +1,23 @@
+[
+  {
+    "name": "BNB Token",
+    "symbol": "BNB",
+    "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "chainId": 56,
+    "decimals": 18
+  },
+  {
+    "name": "BUSD Token",
+    "symbol": "BUSD",
+    "address": "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+    "chainId": 56,
+    "decimals": 18
+  },
+  {
+    "name": "Tether USD",
+    "symbol": "USDT",
+    "address": "0x55d398326f99059ff775485246999027b3197955",
+    "chainId": 56,
+    "decimals": 18
+  }
+]
