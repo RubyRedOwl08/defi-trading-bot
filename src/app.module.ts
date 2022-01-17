@@ -12,6 +12,7 @@ import { PostgresConfigService } from './postgresConfig/postgres-config.service'
 import { EthersConnectModule } from './ethersConnect/ethersConnect.module'
 import { AwsSdkConfigServices } from './awsSdkConfig/aws-sdk-config.service'
 import { AwsSdkConfigModule } from './awsSdkConfig/aws-sdk-config.module'
+import { BotManagerModule } from './botManager/bot-manager.module'
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { AwsSdkConfigModule } from './awsSdkConfig/aws-sdk-config.module'
     ConfigModuleByLib.load(path.resolve(__dirname, 'config', '**/!(*.d).{ts,js}')),
     EthersConnectModule,
     UtilsModule,
-    AwsSdkConfigModule
+    AwsSdkConfigModule,
+    BotManagerModule
   ],
   controllers: [AppController],
   providers: [AppService, PostgresConfigService]
