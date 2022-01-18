@@ -1,25 +1,17 @@
-import { Body, Param, Controller, Get, Post, Patch } from '@nestjs/common'
-import { OrderEntity } from './bot-manager.entiry'
+import { Controller } from '@nestjs/common'
 import { BotManagerService } from './bot-manager.service'
 import { BotManagerTaskService } from './bot-manager.task'
 import { InjectConfig } from 'nestjs-config'
 // import { BotManagerTask } from './interfaces/bot-manager.interface'
-import { CreateOrderDto } from './dto/CreateOrderDto'
 
 @Controller('bot-manager')
 export class BotManagerController {
-  // farmService: FarmService
   constructor(
     @InjectConfig()
     private readonly config,
     private botManagerService: BotManagerService,
     private botManagerTeskService: BotManagerTaskService
   ) {}
-
-  @Post('/order')
-  createOrder(@Body() createOrderDto: CreateOrderDto): Promise<OrderEntity> {
-    return this.botManagerService.createOrder(createOrderDto)
-  }
 
   // @Get()
   // getOrders() {

@@ -13,6 +13,7 @@ import { EthersConnectModule } from './ethersConnect/ethersConnect.module'
 import { AwsSdkConfigServices } from './awsSdkConfig/aws-sdk-config.service'
 import { AwsSdkConfigModule } from './awsSdkConfig/aws-sdk-config.module'
 import { BotManagerModule } from './botManager/bot-manager.module'
+import { OrderbookModule } from './orderbook/orderbook.module'
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { BotManagerModule } from './botManager/bot-manager.module'
     EthersConnectModule,
     UtilsModule,
     AwsSdkConfigModule,
-    BotManagerModule
+    BotManagerModule,
+    OrderbookModule
   ],
   controllers: [AppController],
   providers: [AppService, PostgresConfigService]

@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { OrderType, OrderStatus } from './interfaces/bot-manager.interface'
+import { OrderbookType, OrderbookStatus } from './interfaces/orderbook.interface'
 
 @Entity()
-export class OrderEntity {
+export class OrderbookEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -22,10 +22,10 @@ export class OrderEntity {
   descTokenSymbol: string
 
   @Column()
-  type: OrderType
+  type: OrderbookType
 
   @Column()
-  status: OrderStatus
+  status: OrderbookStatus
 
   @Column()
   tragetPrice: string

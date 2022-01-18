@@ -1,23 +1,24 @@
-// import { NotFoundException } from '@nestjs/common'
 import { EntityRepository, Repository } from 'typeorm'
-// import { GetOrdersFilterDto } from './dto/GetOrdersFilterDto'
-import { OrderEntity } from './bot-manager.entiry'
-// import { BotManagerTask } from './interfaces/bot-manager.interface'
-// import { CreateOrderDto } from './dto/CreateOrderDto'
-// import { getAddress } from 'nestjs-ethers'
+import { OrderbookStatus } from './interfaces/orderbook.interface'
+import { OrderbookEntity } from './orderbook.entiry'
 
-@EntityRepository(OrderEntity)
-export class FarmRepository extends Repository<OrderEntity> {
-  async createFarm(createOrderData: any): Promise<OrderEntity> {
-    const order = this.create({
-      srcTokenAddress: createOrderData.srcTokenAddress,
-      srcTokenSymbol: createOrderData.srcTokenSymbol,
-      descTokenAddress: createOrderData.descTokenAddress,
-      descTokenSymbol: createOrderData.descTokenSymbol,
-      tragetPrice: createOrderData.tragetPrice,
-      type: createOrderData.type,
-      status: createOrderData.status
-    })
+@EntityRepository(OrderbookEntity)
+export class OrderbookRepository extends Repository<OrderbookEntity> {
+  async createOrderbook(createOrderData: any): Promise<OrderbookEntity> {
+    const order = this.create(
+      Object.assign(
+        {
+          srcTokenAddress: createOrderData.srcTokenAddress,
+          srcTokenSymbol: createOrderData.srcTokenSymbol,
+          descTokenAddress: createOrderData.descTokenAddress,
+          descTokenSymbol: createOrderData.descTokenSymbol,
+          tragetPrice: createOrderData.tragetPrice,
+          type: createOrderData.orderType,
+          status: OrderbookStatus.UNKNOWN
+        },
+        createOrderData.hasOwnProperty('description') ? { description: createOrderData.description } : null
+      )
+    )
 
     await this.save(order)
     return order

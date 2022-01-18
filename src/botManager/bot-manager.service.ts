@@ -1,15 +1,11 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common'
-import { ethers } from 'ethers'
-import BigNumber from 'bignumber.js'
+import { Injectable, Logger } from '@nestjs/common'
+// import { ethers } from 'ethers'
+// import BigNumber from 'bignumber.js'
 import { UtilsService } from 'src/utils/utils.service'
 import { WardenswapService } from 'src/wardenswap/wardenswap.service'
-import { FarmRepository } from './bot-manager.repository'
-import { OrderEntity } from './bot-manager.entiry'
 import { InjectConfig } from 'nestjs-config'
 import { BotManagerTaskService } from './bot-manager.task'
-import { BotManagerTask, OrderStatus, OrderType } from './interfaces/bot-manager.interface'
-import { CreateOrderDto } from './dto/CreateOrderDto'
-import { getAddress } from 'nestjs-ethers'
+import { BotManagerTask } from './interfaces/bot-manager.interface'
 
 @Injectable()
 export class BotManagerService {
@@ -18,27 +14,8 @@ export class BotManagerService {
     private utilsService: UtilsService,
     private wardenSwapServeice: WardenswapService,
     private botManagerTaskService: BotManagerTaskService,
-    private farmRepository: FarmRepository,
     @InjectConfig() private readonly config
   ) {}
-
-  createOrder(createOrderDto: CreateOrderDto): Promise<OrderEntity> {
-    const srcTokenData = this.utilsService.getTokenData(createOrderDto.srcTokenAddress)
-    const descTokenData = this.utilsService.getTokenData(createOrderDto.descTokenAddress)
-
-    const exprectedOrder = {
-      srcTokenAddress: srcTokenData.address,
-      srcTokenSymbol: srcTokenData.symbol,
-      descTokenAddress: descTokenData.address,
-      descTokenSymbol: descTokenData.symbol,
-      tragetPrice: createOrderDto.tragetPrice,
-      type: createOrderDto.orderType,
-      status: OrderStatus.UNKNOWN
-    }
-    this.logger.debug('Test create', exprectedOrder)
-    return this.farmRepository.createFarm(exprectedOrder)
-  }
-
   // getFarms(): Promise<FarmEntity[]> {
   //   this.logger.debug('try get farms')
   //   return this.farmRepository.getFarms()

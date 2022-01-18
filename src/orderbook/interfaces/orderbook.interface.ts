@@ -1,0 +1,16 @@
+export enum OrderbookType {
+  MARKET_BUY = 'MARKET_BUY',
+  MARKET_SELL = 'MARKET_SELL',
+  BUY_LIMIT = 'BUY_LIMIT',
+  SELL_LIMIT = 'SELL_LIMIT',
+  BUY_STOP = 'BUY_STOP',
+  SELL_STOP = 'SELL_STOP'
+}
+
+export enum OrderbookStatus {
+  UNKNOWN = 'UNKNOWN',
+  SUCCESS = 'SUCCESS',
+  CANCELED = 'CANCELED',
+  FAILED = 'FAILED',
+  PENDING = 'PENDING'
+}
