@@ -5,8 +5,9 @@ import { UtilsModule } from 'src/utils/utils.module'
 import { OrderbookController } from './orderbook.controller'
 import { OrderbookService } from './orderbook.service'
 import { OrderbookRepository } from './orderbook.repository'
+import { WardenswapModule } from 'src/wardenswap/wardenswap.module'
 @Module({
-  imports: [ConfigModule, UtilsModule, TypeOrmModule.forFeature([OrderbookRepository])],
+  imports: [ConfigModule, UtilsModule, WardenswapModule, TypeOrmModule.forFeature([OrderbookRepository])],
   controllers: [OrderbookController],
   providers: [OrderbookService]
 })

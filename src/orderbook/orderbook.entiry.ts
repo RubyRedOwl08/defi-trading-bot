@@ -30,6 +30,9 @@ export class OrderbookEntity {
   @Column()
   tragetPrice: string
 
+  @Column()
+  activationPrice: string
+
   @CreateDateColumn()
   createdAt: Date
 

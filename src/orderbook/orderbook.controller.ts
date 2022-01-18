@@ -13,7 +13,7 @@ export class OrderbookController {
   ) {}
 
   @Post('')
-  createOrder(@Body() createOrderDto: CreateOrderbookDto): Promise<OrderbookEntity> {
+  createOrderbook(@Body() createOrderDto: CreateOrderbookDto): Promise<OrderbookEntity> {
     return this.orderbookService.createOrder(createOrderDto)
   }
 }

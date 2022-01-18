@@ -9,14 +9,21 @@ export class CreateOrderbookDto {
   @IsEthereumAddress()
   descTokenAddress: string
 
-  @IsNotEmpty()
-  orderType: OrderbookType
+  @IsNumberString()
+  srcAmount: string
 
   @IsNumberString()
   tragetPrice: string
+
+  @IsNotEmpty()
+  orderType: OrderbookType
 
   @IsString()
   @IsOptional()
   @MaxLength(200)
   description: string
+
+  @IsNumberString()
+  @IsOptional()
+  priceSlippagePercent
 }
