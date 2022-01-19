@@ -11,3 +11,7 @@ export enum OrderbookStatus {
   FAILED = 'FAILED',
   PENDING = 'PENDING'
 }
+
+import { OrderbookEntity } from '../orderbook.entiry'
+
+export type OrderbookEntityOptional = Partial<OrderbookEntity>

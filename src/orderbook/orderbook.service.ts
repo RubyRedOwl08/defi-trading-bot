@@ -1,12 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { UtilsService } from 'src/utils/utils.service'
 import { WardenswapService } from 'src/wardenswap/wardenswap.service'
-import { CreateOrderbookDto } from './dto/CreateOrderDto'
-import { OrderbookStatus } from './interfaces/orderbook.interface'
+import { CreateOrderbookDto } from './dto/CreateOrderbookDto'
+import { OrderbookStatus, OrderbookType } from './interfaces/orderbook.interface'
 import { OrderbookEntity } from './orderbook.entiry'
 import { OrderbookRepository } from './orderbook.repository'
-import { BigNumber } from 'nestjs-ethers'
+import { BigNumber } from 'bignumber.js'
 import { ethers } from 'ethers'
+import { GetOrderbooksFilterDto } from './dto/GetOrderBooksFilterDto'
+import { BotManagerTask } from 'src/botManager/interfaces/bot-manager.interface'
 @Injectable()
 export class OrderbookService {
   private logger = new Logger('OrderbookService')
@@ -16,26 +18,57 @@ export class OrderbookService {
     private orderbookRepository: OrderbookRepository
   ) {}
 
-  async createOrder(createOrderDto: CreateOrderbookDto): Promise<OrderbookEntity> {
-    const srcTokenData = this.utilsService.getTokenData(createOrderDto.srcTokenAddress)
-    const descTokenData = this.utilsService.getTokenData(createOrderDto.descTokenAddress)
+  async createOrder(createOrderbookDto: CreateOrderbookDto): Promise<OrderbookEntity> {
+    const srcTokenData = this.utilsService.getTokenData(createOrderbookDto.srcTokenAddress)
+    const descTokenData = this.utilsService.getTokenData(createOrderbookDto.descTokenAddress)
 
-    const srcAmountInWei = ethers.utils.parseUnits(createOrderDto.srcAmount, srcTokenData.decimals).toString()
+    const srcAmountInWei = ethers.utils.parseUnits(createOrderbookDto.srcAmount, srcTokenData.decimals).toString()
+    const bestRateResult = await this.wardenSwapService.getRate(
+      srcTokenData.address,
+      descTokenData.address,
+      srcAmountInWei
+    )
+    const amountOutInBase = ethers.utils.formatUnits(bestRateResult.amountOut.toString(), descTokenData.decimals)
+    const activationPrice = new BigNumber(amountOutInBase).div(createOrderbookDto.srcAmount).toString(10)
+    console.log('activationPrice ==>', activationPrice)
+    let currentTask: BotManagerTask
+
+    switch (createOrderbookDto.orderType) {
+      case OrderbookType.MARKET:
+        currentTask = BotManagerTask.SWAP_TOKEN
+        break
+      case OrderbookType.STOP_LIMIT:
+        currentTask = BotManagerTask.CHECK_PRICE
+        break
+      default:
+        throw new Error(`Order type ${createOrderbookDto.orderType} not support.`)
+    }
+
     const orderbookDataAddon = Object.assign(
       {
         srcTokenAddress: srcTokenData.address,
         srcTokenSymbol: srcTokenData.symbol,
+        srcAmountInBase: createOrderbookDto.srcAmount,
         descTokenAddress: descTokenData.address,
-        descTokenSymbol: descTokenData.symbol
+        descTokenSymbol: descTokenData.symbol,
+        activationPrice: activationPrice,
+        currentTask: currentTask,
+        type: createOrderbookDto.orderType,
+        status: OrderbookStatus.UNKNOWN,
+        isOpen: true
       },
-      createOrderDto
+      createOrderbookDto
     )
+    // TODO: should check balance before create order
     this.logger.debug('Test create', orderbookDataAddon)
-    const result = await this.wardenSwapService.getRate(srcTokenData.address, descTokenData.address, srcAmountInWei)
-    // this.logger.debug(`Best rate `)
-
-    // TODO: code here
-    console.log('Best rate ==>', ethers.utils.formatUnits(result.amountOut.toString(), descTokenData.decimals))
     return this.orderbookRepository.createOrderbook(orderbookDataAddon)
+  }
+
+  async getOrderbooks(getOrderbooksFilterDto: GetOrderbooksFilterDto): Promise<OrderbookEntity[]> {
+    return this.orderbookRepository.getOrderbooks(getOrderbooksFilterDto)
+  }
+
+  async getOrderbookById(id: string): Promise<OrderbookEntity> {
+    return this.orderbookRepository.getOrderbookById(id)
   }
 }

@@ -12,20 +12,4 @@ export class BotManagerController {
     private botManagerService: BotManagerService,
     private botManagerTeskService: BotManagerTaskService
   ) {}
-
-  // @Get()
-  // getOrders() {
-  //   // TODO: fixed
-  //   return this.botManagerService.
-  // }
-  // TODO: fixed
-  // @Patch('stopFarm')
-  // stopFarm(@Body() dto: any) {
-  //   const { farmId } = dto
-  //   // this.farmTeskService.updateFarmTask(farmId, { isRunEvent: false })
-  //   this.config.set(`farm.tasks.${farmId}.isRunEvent`, false)
-  //   const t3 = this.config.get(`farm.tasks.${farmId}`)
-  //   console.log('t3==>', t3)
-  //   return
-  // }
 }

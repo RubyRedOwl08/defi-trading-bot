@@ -1,3 +1,4 @@
+import { BotManagerTask } from 'src/botManager/interfaces/bot-manager.interface'
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 import { OrderbookType, OrderbookStatus } from './interfaces/orderbook.interface'
 
@@ -16,6 +17,9 @@ export class OrderbookEntity {
   srcTokenSymbol: string
 
   @Column()
+  srcAmountInBase: string
+
+  @Column()
   descTokenAddress: string
 
   @Column()
@@ -28,10 +32,16 @@ export class OrderbookEntity {
   status: OrderbookStatus
 
   @Column()
+  currentTask: BotManagerTask
+
+  @Column()
   tragetPrice: string
 
   @Column()
   activationPrice: string
+
+  @Column()
+  isOpen: boolean
 
   @CreateDateColumn()
   createdAt: Date

@@ -1,5 +1,5 @@
 export enum BotManagerTask {
-  CREATE_ORDER = 'CREATE_ORDER',
+  SWAP_TOKEN = 'SWAP_TOKEN',
   CHECK_PRICE = 'CHECK_PRICE'
 }
 

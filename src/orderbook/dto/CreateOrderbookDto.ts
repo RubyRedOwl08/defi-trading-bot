@@ -1,5 +1,7 @@
 import { IsNotEmpty, IsEthereumAddress, IsNumberString, IsString, IsOptional, MaxLength } from 'class-validator'
+import { BotManagerTask } from 'src/botManager/interfaces/bot-manager.interface'
 import { OrderbookType } from '../interfaces/orderbook.interface'
+
 export class CreateOrderbookDto {
   @IsNotEmpty()
   @IsEthereumAddress()
