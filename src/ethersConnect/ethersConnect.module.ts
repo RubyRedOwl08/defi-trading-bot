@@ -5,12 +5,12 @@ import { UtilsModule } from 'src/utils/utils.module'
 import { EthersConnectService } from './ethers.service'
 import { AwsSdkModule } from 'nest-aws-sdk'
 import { KMS } from 'aws-sdk'
-
+import { NETWORK_CONSTANT } from '../constants/index'
 @Module({
   imports: [
     EthersModule.forRoot({
       network: BINANCE_NETWORK,
-      custom: 'https://bsc-dataseed.binance.org/',
+      custom: NETWORK_CONSTANT[56].RPC_OFFICIAL_URL,
       useDefaultProvider: false
     }),
     AwsSdkModule.forFeatures([KMS]),

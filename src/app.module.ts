@@ -14,6 +14,7 @@ import { AwsSdkConfigServices } from './awsSdkConfig/aws-sdk-config.service'
 import { AwsSdkConfigModule } from './awsSdkConfig/aws-sdk-config.module'
 import { BotManagerModule } from './botManager/bot-manager.module'
 import { OrderbookModule } from './orderbook/orderbook.module'
+import { TradebookModule } from './tradebook/tradebook.module';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { OrderbookModule } from './orderbook/orderbook.module'
     UtilsModule,
     AwsSdkConfigModule,
     BotManagerModule,
-    OrderbookModule
+    OrderbookModule,
+    TradebookModule
   ],
   controllers: [AppController],
   providers: [AppService, PostgresConfigService]

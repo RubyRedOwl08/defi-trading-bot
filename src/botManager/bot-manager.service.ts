@@ -66,7 +66,7 @@ export class BotManagerService {
     }
 
     const srcTokenData = this.utilsService.getTokenData(orderbookData.srcTokenAddress)
-    const descTokenData = this.utilsService.getTokenData(orderbookData.descTokenAddress)
+    const destTokenData = this.utilsService.getTokenData(orderbookData.destTokenAddress)
 
     const srcAmountInWei = ethers.utils.parseUnits(orderbookData.srcAmountInBase, srcTokenData.decimals).toString()
     while (isLoopInterval) {
@@ -81,13 +81,13 @@ export class BotManagerService {
 
         const bestRateNow = await this.wardenSwapServeice.getRate(
           orderbookData.srcTokenAddress,
-          orderbookData.descTokenAddress,
+          orderbookData.destTokenAddress,
           srcAmountInWei
         )
         const bestRateAmountOutInWei = bestRateNow.amountOut.toString()
-        const bestRateAmountOutInBase = ethers.utils.formatUnits(bestRateAmountOutInWei, descTokenData.decimals)
+        const bestRateAmountOutInBase = ethers.utils.formatUnits(bestRateAmountOutInWei, destTokenData.decimals)
 
-        this.utilsService.checkBestRateAmountOut(bestRateNow, srcTokenData.symbol, descTokenData.symbol)
+        this.utilsService.checkBestRateAmountOut(bestRateNow, srcTokenData.symbol, destTokenData.symbol)
 
         const priceNow = new BigNumber(bestRateAmountOutInBase).div(orderbookData.srcAmountInBase).toString(10)
         this.logger.log('---------------------------------------------------------')
@@ -157,10 +157,11 @@ export class BotManagerService {
 
       const transactionReceiptData = await this.wardenSwapServeice.tradeToken(
         orderbookData.srcTokenAddress,
-        orderbookData.descTokenAddress,
+        orderbookData.destTokenAddress,
         srcAmountInWei
       )
       console.log('transactionReceiptData', JSON.stringify(transactionReceiptData, null, 4))
+      // TODO: store trade book
     } catch (error) {
       this.logger.error(error.message)
       await this.orderbookRepository.updateOrderBookById(orderbookId, {

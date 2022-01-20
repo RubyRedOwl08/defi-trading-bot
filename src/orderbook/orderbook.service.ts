@@ -22,7 +22,7 @@ export class OrderbookService {
 
   async createOrder(createOrderbookDto: CreateOrderbookDto): Promise<OrderbookEntity> {
     const srcTokenData = this.utilsService.getTokenData(createOrderbookDto.srcTokenAddress)
-    const descTokenData = this.utilsService.getTokenData(createOrderbookDto.descTokenAddress)
+    const destTokenData = this.utilsService.getTokenData(createOrderbookDto.destTokenAddress)
 
     const srcAmountInWei = ethers.utils.parseUnits(createOrderbookDto.srcAmount, srcTokenData.decimals).toString()
     console.log('srcAmountInWei', srcAmountInWei)
@@ -38,13 +38,13 @@ export class OrderbookService {
 
     const bestRateResult = await this.wardenSwapService.getRate(
       srcTokenData.address,
-      descTokenData.address,
+      destTokenData.address,
       srcAmountInWei
     )
 
-    const amountOutInBase = ethers.utils.formatUnits(bestRateResult.amountOut.toString(), descTokenData.decimals)
+    const amountOutInBase = ethers.utils.formatUnits(bestRateResult.amountOut.toString(), destTokenData.decimals)
 
-    this.utilsService.checkBestRateAmountOut(bestRateResult, srcTokenData.symbol, descTokenData.symbol)
+    this.utilsService.checkBestRateAmountOut(bestRateResult, srcTokenData.symbol, destTokenData.symbol)
 
     const activationPrice = new BigNumber(amountOutInBase).div(createOrderbookDto.srcAmount).toString(10)
     console.log('activationPrice ==>', activationPrice)
@@ -66,8 +66,8 @@ export class OrderbookService {
         srcTokenAddress: srcTokenData.address,
         srcTokenSymbol: srcTokenData.symbol,
         srcAmountInBase: createOrderbookDto.srcAmount,
-        descTokenAddress: descTokenData.address,
-        descTokenSymbol: descTokenData.symbol,
+        destTokenAddress: destTokenData.address,
+        destTokenSymbol: destTokenData.symbol,
         activationPrice: activationPrice,
         currentTask: currentTask,
         type: createOrderbookDto.orderType,

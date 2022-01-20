@@ -71,10 +71,10 @@ export class UtilsService {
     })
   }
 
-  public checkBestRateAmountOut(bestRateResult: GetQuote, srcTokenSymbol?: string, descTokenSymbol?: string) {
+  public checkBestRateAmountOut(bestRateResult: GetQuote, srcTokenSymbol?: string, destTokenSymbol?: string) {
     const amountOutInWei = bestRateResult.amountOut.toString()
     if (new BigNumber(amountOutInWei).isZero() || new BigNumber(amountOutInWei).isNaN()) {
-      throw new NotFoundException(`Swap pair ${srcTokenSymbol}-${descTokenSymbol} no liquidity`)
+      throw new NotFoundException(`Swap pair ${srcTokenSymbol}-${destTokenSymbol} no liquidity`)
     }
   }
 }

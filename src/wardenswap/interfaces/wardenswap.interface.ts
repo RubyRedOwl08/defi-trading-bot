@@ -28,4 +28,5 @@ export interface TransactionReceiptData {
   destAmountInWei: string
   srcAssetData: Token
   destAssetData: Token
+  transactionFee: string
 }

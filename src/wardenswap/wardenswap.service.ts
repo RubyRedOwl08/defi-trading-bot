@@ -37,11 +37,11 @@ export class WardenswapService {
     this.logger.debug('Start trade')
     const wardenRounterAddress = NETWORK_CONSTANT[56].WARDEN_ROUTING_CONTRACT_ADDRESS
     const srcTokenData = this.utilsService.getTokenData(tokenAAddress)
-    const descTokenData = this.utilsService.getTokenData(tokenBAddress)
+    const destTokenData = this.utilsService.getTokenData(tokenBAddress)
 
-    const bestRateResult = await this.getRate(srcTokenData.address, descTokenData.address, tokenAAmountInWei, false)
+    const bestRateResult = await this.getRate(srcTokenData.address, destTokenData.address, tokenAAmountInWei, false)
 
-    this.utilsService.checkBestRateAmountOut(bestRateResult, srcTokenData.symbol, descTokenData.symbol)
+    this.utilsService.checkBestRateAmountOut(bestRateResult, srcTokenData.symbol, destTokenData.symbol)
 
     let tradeArgs: Array<any>
     let methodName: MethodNameForTrade
@@ -49,7 +49,7 @@ export class WardenswapService {
       methodName = MethodNameForTrade.TRADE_STRATEGIES
       tradeArgs = this.generateDataForTradeStrategies(
         srcTokenData.address,
-        descTokenData.address,
+        destTokenData.address,
         tokenAAmountInWei,
         bestRateResult
       )
@@ -155,10 +155,11 @@ export class WardenswapService {
     const eventTrade = transactionReceipt?.events.find((event) => event.event === 'Trade')
     const srcAssetData = this.utilsService.getTokenData(eventTrade.args.srcAsset)
     const destAssetData = this.utilsService.getTokenData(eventTrade.args.destAsset)
-    // const txFee = new BigNumber(transactionReceipt.gasUsed.toString()).times()
-    console.log('transactionReceipt', JSON.stringify(transactionReceipt, null, 4))
-    console.log('cumulativeGasUsed', transactionReceipt.cumulativeGasUsed.toString())
-    console.log('effectiveGasPrice', transactionReceipt.effectiveGasPrice.toString())
+    const txFeeInWei = new BigNumber(transactionReceipt.gasUsed.toString())
+      .times(ethers.utils.parseUnits('5', 'gwei').toString())
+      .toString()
+    const txFeeInBase = utils.formatEther(txFeeInWei)
+
     const transactionReceiptData: TransactionReceiptData = {
       srcAssetAddress: eventTrade.args.srcAsset,
       destAssetAddress: eventTrade.args.destAsset,
@@ -167,7 +168,8 @@ export class WardenswapService {
       srcAmountInWei: eventTrade.args.srcAmount.toString(),
       srcAmountInBase: utils.formatUnits(eventTrade.args.srcAmount, srcAssetData.decimals).toString(),
       destAmountInWei: eventTrade.args.destAmount.toString(),
-      destAmountInBase: utils.formatUnits(eventTrade.args.destAmount, destAssetData.decimals).toString()
+      destAmountInBase: utils.formatUnits(eventTrade.args.destAmount, destAssetData.decimals).toString(),
+      transactionFee: txFeeInBase
     }
 
     return transactionReceiptData

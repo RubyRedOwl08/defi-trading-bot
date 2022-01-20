@@ -9,7 +9,7 @@ export class CreateOrderbookDto {
 
   @IsNotEmpty()
   @IsEthereumAddress()
-  descTokenAddress: string
+  destTokenAddress: string
 
   @IsNumberString()
   srcAmount: string

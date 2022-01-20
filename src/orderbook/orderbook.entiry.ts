@@ -20,10 +20,10 @@ export class OrderbookEntity {
   srcAmountInBase: string
 
   @Column()
-  descTokenAddress: string
+  destTokenAddress: string
 
   @Column()
-  descTokenSymbol: string
+  destTokenSymbol: string
 
   @Column()
   type: OrderbookType
