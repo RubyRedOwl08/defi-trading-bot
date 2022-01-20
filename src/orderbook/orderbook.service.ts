@@ -1,4 +1,4 @@
-import { Injectable, Logger, BadRequestException } from '@nestjs/common'
+import { Injectable, Logger, BadRequestException, NotFoundException } from '@nestjs/common'
 import { UtilsService } from 'src/utils/utils.service'
 import { WardenswapService } from 'src/wardenswap/wardenswap.service'
 import { CreateOrderbookDto } from './dto/CreateOrderbookDto'
@@ -25,14 +25,13 @@ export class OrderbookService {
     const descTokenData = this.utilsService.getTokenData(createOrderbookDto.descTokenAddress)
 
     const srcAmountInWei = ethers.utils.parseUnits(createOrderbookDto.srcAmount, srcTokenData.decimals).toString()
-
+    console.log('srcAmountInWei', srcAmountInWei)
     const srcTokenBalanceInWei = await this.ethersConnectService.getBalanceOfTokenWithAddrss(
       createOrderbookDto.srcTokenAddress
     )
     this.logger.debug(
       `Token ${srcTokenData.symbol} balance = ${ethers.utils.formatUnits(srcTokenBalanceInWei, srcTokenData.decimals)}`
     )
-    // TODO: should support native token
     if (new BigNumber(srcAmountInWei).gt(srcTokenBalanceInWei)) {
       throw new BadRequestException(`Token ${srcTokenData.symbol} balance not enough`)
     }
@@ -42,9 +41,11 @@ export class OrderbookService {
       descTokenData.address,
       srcAmountInWei
     )
-    // TODO: should check amaountout not 0 and deposite address not ''
 
     const amountOutInBase = ethers.utils.formatUnits(bestRateResult.amountOut.toString(), descTokenData.decimals)
+
+    this.utilsService.checkBestRateAmountOut(bestRateResult, srcTokenData.symbol, descTokenData.symbol)
+
     const activationPrice = new BigNumber(amountOutInBase).div(createOrderbookDto.srcAmount).toString(10)
     console.log('activationPrice ==>', activationPrice)
     let currentTask: BotManagerTask

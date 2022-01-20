@@ -6,8 +6,7 @@ import BigNumber from 'bignumber.js'
 import { getAddress } from 'nestjs-ethers'
 import { EthersConnectService } from 'src/ethersConnect/ethers.service'
 import { UtilsService } from 'src/utils/utils.service'
-import { GetQuote, MethodNameForTrade, TransactionReceiptData, Token } from './interfaces/wardenswap.interface'
-import { ConfigService } from '@nestjs/config'
+import { GetQuote, MethodNameForTrade, TransactionReceiptData } from './interfaces/wardenswap.interface'
 import { NETWORK_CONSTANT } from 'src/constants'
 import { ApprovalState } from 'src/ethersConnect/interfaces/ethers.interface'
 @Injectable()
@@ -37,19 +36,20 @@ export class WardenswapService {
   async tradeToken(tokenAAddress: string, tokenBAddress: string, tokenAAmountInWei: string) {
     this.logger.debug('Start trade')
     const wardenRounterAddress = NETWORK_CONSTANT[56].WARDEN_ROUTING_CONTRACT_ADDRESS
-    const tokenAData = this.utilsService.getTokenData(tokenAAddress)
-    const tokenBData = this.utilsService.getTokenData(tokenBAddress)
+    const srcTokenData = this.utilsService.getTokenData(tokenAAddress)
+    const descTokenData = this.utilsService.getTokenData(tokenBAddress)
 
-    const bestRateResult = await this.getRate(tokenAData.address, tokenBData.address, tokenAAmountInWei, false)
-    // TODO: should check amaountout not 0 and deposite address not ''
+    const bestRateResult = await this.getRate(srcTokenData.address, descTokenData.address, tokenAAmountInWei, false)
+
+    this.utilsService.checkBestRateAmountOut(bestRateResult, srcTokenData.symbol, descTokenData.symbol)
 
     let tradeArgs: Array<any>
     let methodName: MethodNameForTrade
     if (bestRateResult.type === 'strategies') {
       methodName = MethodNameForTrade.TRADE_STRATEGIES
       tradeArgs = this.generateDataForTradeStrategies(
-        tokenAData.address,
-        tokenBData.address,
+        srcTokenData.address,
+        descTokenData.address,
         tokenAAmountInWei,
         bestRateResult
       )
@@ -59,15 +59,19 @@ export class WardenswapService {
       throw new Error(`Function getRate best rate type ${bestRateResult?.type} not support`)
     }
 
+    if (getAddress(srcTokenData.address) === getAddress(NETWORK_CONSTANT[56].NATIVE_TOKEN.address)) {
+      tradeArgs.push({ value: tokenAAmountInWei })
+    }
+
     this.logger.debug('check isAllowanced')
     const approvalState = await this.ethersConnectService.checkIsAllowanced(
       this.ethersConnectService.botWalletAddress,
-      tokenAData.address,
+      srcTokenData.address,
       wardenRounterAddress
     )
     this.logger.debug('approvalState', approvalState)
     if (approvalState === ApprovalState.NOT_APPROVED) {
-      await this.ethersConnectService.approveToken(tokenAData.address, wardenRounterAddress)
+      await this.ethersConnectService.approveToken(srcTokenData.address, wardenRounterAddress)
       this.logger.debug('Delay 15s')
       await this.utilsService.delay(1000 * 15)
     }
@@ -151,6 +155,10 @@ export class WardenswapService {
     const eventTrade = transactionReceipt?.events.find((event) => event.event === 'Trade')
     const srcAssetData = this.utilsService.getTokenData(eventTrade.args.srcAsset)
     const destAssetData = this.utilsService.getTokenData(eventTrade.args.destAsset)
+    // const txFee = new BigNumber(transactionReceipt.gasUsed.toString()).times()
+    console.log('transactionReceipt', JSON.stringify(transactionReceipt, null, 4))
+    console.log('cumulativeGasUsed', transactionReceipt.cumulativeGasUsed.toString())
+    console.log('effectiveGasPrice', transactionReceipt.effectiveGasPrice.toString())
     const transactionReceiptData: TransactionReceiptData = {
       srcAssetAddress: eventTrade.args.srcAsset,
       destAssetAddress: eventTrade.args.destAsset,

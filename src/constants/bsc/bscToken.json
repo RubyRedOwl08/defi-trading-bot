@@ -26,5 +26,13 @@
     "address": "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
     "chainId": 56,
     "decimals": 18
+  },
+  {
+    "name": "LATTEv2",
+    "symbol": "LATTE",
+    "address": "0xa269A9942086f5F87930499dC8317ccC9dF2b6CB",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://latteswap-asset.s3.ap-southeast-1.amazonaws.com/icons/tokens/lattev2.png"
   }
 ]

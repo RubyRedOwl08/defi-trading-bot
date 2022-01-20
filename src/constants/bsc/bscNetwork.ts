@@ -1,5 +1,7 @@
 const data = {
-  RPC_OFFICIAL_URL: 'https://bsc-dataseed.binance.org/',
+  // TODO: for test
+  RPC_OFFICIAL_URL: 'https://rpc.tenderly.co/fork/6b69ca2d-bafa-4761-aaf3-09426083f682',
+  // RPC_OFFICIAL_URL: 'https://bsc-dataseed.binance.org/',
   WARDEN_ROUTING_CONTRACT_ADDRESS: '0x451ef8D6B645a60115EB8b8bEa76B39C0C761004',
   PARTNER_ID: '5',
   NATIVE_TOKEN: {

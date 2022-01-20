@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { ethers } from 'ethers'
 import BigNumber from 'bignumber.js'
 import { UtilsService } from 'src/utils/utils.service'
@@ -84,9 +84,12 @@ export class BotManagerService {
           orderbookData.descTokenAddress,
           srcAmountInWei
         )
-        // TODO: should check amaountout not 0 and deposite address not ''
-        const amountOutInBase = ethers.utils.formatUnits(bestRateNow.amountOut.toString(), descTokenData.decimals)
-        const priceNow = new BigNumber(amountOutInBase).div(orderbookData.srcAmountInBase).toString(10)
+        const bestRateAmountOutInWei = bestRateNow.amountOut.toString()
+        const bestRateAmountOutInBase = ethers.utils.formatUnits(bestRateAmountOutInWei, descTokenData.decimals)
+
+        this.utilsService.checkBestRateAmountOut(bestRateNow, srcTokenData.symbol, descTokenData.symbol)
+
+        const priceNow = new BigNumber(bestRateAmountOutInBase).div(orderbookData.srcAmountInBase).toString(10)
         this.logger.log('---------------------------------------------------------')
         this.logger.log(`activationPrice ==> ${orderbookData.activationPrice}`)
         this.logger.log(`priceNow ==> ${priceNow}`)

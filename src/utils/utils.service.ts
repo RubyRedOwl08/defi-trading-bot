@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import bscToken from '../constants/bsc/bscToken.json'
 import erc20Abi from '../contracts/abis/erc20.json'
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
 import { Contract } from 'nestjs-ethers'
-
+import { GetQuote } from '../wardenswap/interfaces/wardenswap.interface'
 @Injectable()
 export class UtilsService {
   getTokenData(search: string) {
@@ -69,5 +69,12 @@ export class UtilsService {
         }
       })
     })
+  }
+
+  public checkBestRateAmountOut(bestRateResult: GetQuote, srcTokenSymbol?: string, descTokenSymbol?: string) {
+    const amountOutInWei = bestRateResult.amountOut.toString()
+    if (new BigNumber(amountOutInWei).isZero() || new BigNumber(amountOutInWei).isNaN()) {
+      throw new NotFoundException(`Swap pair ${srcTokenSymbol}-${descTokenSymbol} no liquidity`)
+    }
   }
 }
