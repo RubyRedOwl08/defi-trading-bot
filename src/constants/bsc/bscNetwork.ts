@@ -1,5 +1,5 @@
 const data = {
-  RPC_OFFICIAL_URL: 'https://bsc-dataseed1.defibit.io/',
+  RPC_OFFICIAL_URL: 'https://bsc-dataseed.binance.org/',
   WARDEN_ROUTING_CONTRACT_ADDRESS: '0x451ef8D6B645a60115EB8b8bEa76B39C0C761004',
   PARTNER_ID: '5',
   NATIVE_TOKEN: {

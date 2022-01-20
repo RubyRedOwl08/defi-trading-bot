@@ -15,6 +15,7 @@ export class CreateOrderbookDto {
   srcAmount: string
 
   @IsNumberString()
+  @IsOptional()
   tragetPrice: string
 
   @IsNotEmpty()

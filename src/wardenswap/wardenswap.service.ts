@@ -22,15 +22,14 @@ export class WardenswapService {
     tokenAAddress: string,
     tokenBAddress: string,
     amountInWei: string,
-    enableSplit = false,
-    fetchDepositAddresses = false
+    enableSplit = false
   ): Promise<GetQuote> {
     const quote = await this.wardenBestRateSdk.getQuote(
       tokenAAddress,
       tokenBAddress,
       BigNumberForEthers.from(amountInWei),
       ethers.utils.parseUnits('5', 'gwei'), // TODO: for bsc
-      { enableSplit, fetchDepositAddresses }
+      { enableSplit: enableSplit }
     )
     return quote
   }
@@ -41,7 +40,8 @@ export class WardenswapService {
     const tokenAData = this.utilsService.getTokenData(tokenAAddress)
     const tokenBData = this.utilsService.getTokenData(tokenBAddress)
 
-    const bestRateResult = await this.getRate(tokenAData.address, tokenBData.address, tokenAAmountInWei, false, true)
+    const bestRateResult = await this.getRate(tokenAData.address, tokenBData.address, tokenAAmountInWei, false)
+    // TODO: should check amaountout not 0 and deposite address not ''
 
     let tradeArgs: Array<any>
     let methodName: MethodNameForTrade

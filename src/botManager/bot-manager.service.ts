@@ -7,8 +7,9 @@ import { InjectConfig } from 'nestjs-config'
 import { BotManagerTaskService } from './bot-manager.task'
 import { BotManagerTask } from './interfaces/bot-manager.interface'
 import { OrderbookRepository } from 'src/orderbook/orderbook.repository'
-import { OrderbookStatus, OrderbookType } from 'src/orderbook/interfaces/orderbook.interface'
+import { OrderbookStatus } from 'src/orderbook/interfaces/orderbook.interface'
 import { OrderbookEntity } from 'src/orderbook/orderbook.entiry'
+import { EthersConnectService } from 'src/ethersConnect/ethers.service'
 
 @Injectable()
 export class BotManagerService {
@@ -18,6 +19,7 @@ export class BotManagerService {
     private wardenSwapServeice: WardenswapService,
     private botManagerTaskService: BotManagerTaskService,
     private orderbookRepository: OrderbookRepository,
+    private ethersConnectService: EthersConnectService,
     @InjectConfig() private readonly config
   ) {}
 
@@ -38,6 +40,7 @@ export class BotManagerService {
     if (!orderbookData.isOpen) {
       return
     }
+
     this.logger.log('Start orderbook id: ==>', orderbookId)
     switch (orderbookData.currentTask) {
       case BotManagerTask.CHECK_PRICE:
@@ -81,7 +84,7 @@ export class BotManagerService {
           orderbookData.descTokenAddress,
           srcAmountInWei
         )
-
+        // TODO: should check amaountout not 0 and deposite address not ''
         const amountOutInBase = ethers.utils.formatUnits(bestRateNow.amountOut.toString(), descTokenData.decimals)
         const priceNow = new BigNumber(amountOutInBase).div(orderbookData.srcAmountInBase).toString(10)
         this.logger.log('---------------------------------------------------------')
@@ -127,15 +130,42 @@ export class BotManagerService {
     if (!orderbookData) {
       orderbookData = await this.orderbookRepository.getOrderbookById(orderbookId)
     }
+    const srcTokenData = this.utilsService.getTokenData(orderbookData.srcTokenAddress)
+    // TODO: should change name
+    const srcAmountInWei = ethers.utils.parseUnits(orderbookData.srcAmountInBase, srcTokenData.decimals).toString()
+
     await this.orderbookRepository.updateOrderBookById(orderbookId, { status: OrderbookStatus.PENDING })
     this.logger.log('Swap now')
+
     try {
-      // TODO: code here
+      const srcTokenBalanceInWei = await this.ethersConnectService.getBalanceOfTokenWithAddrss(
+        orderbookData.srcTokenAddress
+      )
+      this.logger.debug(
+        `Token ${srcTokenData.symbol} balance = ${ethers.utils.formatUnits(
+          srcTokenBalanceInWei,
+          srcTokenData.decimals
+        )}`
+      )
+
+      if (new BigNumber(srcAmountInWei).gt(srcTokenBalanceInWei)) {
+        throw new Error(`Token ${srcTokenData.symbol} balance not enough`)
+      }
+
+      const transactionReceiptData = await this.wardenSwapServeice.tradeToken(
+        orderbookData.srcTokenAddress,
+        orderbookData.descTokenAddress,
+        srcAmountInWei
+      )
+      console.log('transactionReceiptData', JSON.stringify(transactionReceiptData, null, 4))
     } catch (error) {
+      this.logger.error(error.message)
       await this.orderbookRepository.updateOrderBookById(orderbookId, {
         isOpen: false,
         status: OrderbookStatus.FAILED
       })
+
+      throw error
     }
 
     await this.orderbookRepository.updateOrderBookById(orderbookId, {

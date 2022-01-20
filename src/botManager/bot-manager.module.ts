@@ -18,6 +18,7 @@ import { OrderbookRepository } from 'src/orderbook/orderbook.repository'
     TypeOrmModule.forFeature([OrderbookRepository])
   ],
   providers: [BotManagerService, BotManagerTaskService],
-  controllers: [BotManagerController]
+  controllers: [BotManagerController],
+  exports: [BotManagerService]
 })
 export class BotManagerModule {}

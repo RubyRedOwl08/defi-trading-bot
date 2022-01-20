@@ -34,7 +34,7 @@ export class OrderbookEntity {
   @Column()
   currentTask: BotManagerTask
 
-  @Column()
+  @Column({ nullable: true })
   tragetPrice: string
 
   @Column()

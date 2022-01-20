@@ -70,6 +70,12 @@ export class EthersConnectService implements OnModuleInit {
   }
 
   async getBalanceOfTokenWithAddrss(tokenAddress: string) {
+    const nativeToken = NETWORK_CONSTANT[56].NATIVE_TOKEN
+    if (getAddress(tokenAddress) === getAddress(nativeToken.address)) {
+      const nativeTokenBalanceInWei = (await this.wallet.getBalance()).toString()
+      return nativeTokenBalanceInWei
+    }
+
     const tokenContract = this.getTokenContract(tokenAddress)
     const tokenBalanceInWei = (await tokenContract.balanceOf(this.botWalletAddress)).toString()
     return tokenBalanceInWei
