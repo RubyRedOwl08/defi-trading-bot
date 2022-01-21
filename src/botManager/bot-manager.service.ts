@@ -10,6 +10,8 @@ import { OrderbookRepository } from 'src/orderbook/orderbook.repository'
 import { OrderbookStatus } from 'src/orderbook/interfaces/orderbook.interface'
 import { OrderbookEntity } from 'src/orderbook/orderbook.entiry'
 import { EthersConnectService } from 'src/ethersConnect/ethers.service'
+import { TradebookService } from 'src/tradebook/tradebook.service'
+import { TransactionReceiptData } from 'src/wardenswap/interfaces/wardenswap.interface'
 
 @Injectable()
 export class BotManagerService {
@@ -20,6 +22,7 @@ export class BotManagerService {
     private botManagerTaskService: BotManagerTaskService,
     private orderbookRepository: OrderbookRepository,
     private ethersConnectService: EthersConnectService,
+    private tradebookService: TradebookService,
     @InjectConfig() private readonly config
   ) {}
 
@@ -47,9 +50,11 @@ export class BotManagerService {
         await this.checkPriceByOrderId(orderbookId)
         this.startBotManagerByOrderbookId(orderbookId)
         break
-      case BotManagerTask.SWAP_TOKEN:
-        await this.swapTokenByOrderbookId(orderbookId)
+      case BotManagerTask.SWAP_TOKEN: {
+        const transactionReceiptData = await this.swapTokenByOrderbookId(orderbookId)
+        await this.tradebookService.createTradebook(transactionReceiptData, orderbookId)
         break
+      }
       default:
         this.logger.log(`Don't have management for task ${orderbookData.currentTask}`)
         return
@@ -129,7 +134,7 @@ export class BotManagerService {
     }
   }
 
-  async swapTokenByOrderbookId(orderbookId: string, orderbookData?: OrderbookEntity) {
+  async swapTokenByOrderbookId(orderbookId: string, orderbookData?: OrderbookEntity): Promise<TransactionReceiptData> {
     if (!orderbookData) {
       orderbookData = await this.orderbookRepository.getOrderbookById(orderbookId)
     }
@@ -160,7 +165,14 @@ export class BotManagerService {
         orderbookData.destTokenAddress,
         srcAmountInWei
       )
+
+      await this.orderbookRepository.updateOrderBookById(orderbookId, {
+        isOpen: false,
+        status: OrderbookStatus.SUCCESS
+      })
+
       console.log('transactionReceiptData', JSON.stringify(transactionReceiptData, null, 4))
+      return transactionReceiptData
       // TODO: store trade book
     } catch (error) {
       this.logger.error(error.message)
@@ -171,10 +183,5 @@ export class BotManagerService {
 
       throw error
     }
-
-    await this.orderbookRepository.updateOrderBookById(orderbookId, {
-      isOpen: false,
-      status: OrderbookStatus.SUCCESS
-    })
   }
 }

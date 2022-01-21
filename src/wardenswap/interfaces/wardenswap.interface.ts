@@ -20,12 +20,13 @@ export interface Token {
 }
 
 export interface TransactionReceiptData {
+  transactionHash: string
   srcAssetAddress: string
   destAssetAddress: string
   srcAmountInBase: string
   srcAmountInWei: string
-  destAmountInBase: string
-  destAmountInWei: string
+  destAmountOutBase: string
+  destAmountOutWei: string
   srcAssetData: Token
   destAssetData: Token
   transactionFee: string

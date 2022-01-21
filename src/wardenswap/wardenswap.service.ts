@@ -161,14 +161,15 @@ export class WardenswapService {
     const txFeeInBase = utils.formatEther(txFeeInWei)
 
     const transactionReceiptData: TransactionReceiptData = {
+      transactionHash: transactionReceipt.transactionHash,
       srcAssetAddress: eventTrade.args.srcAsset,
       destAssetAddress: eventTrade.args.destAsset,
       srcAssetData: srcAssetData,
       destAssetData: destAssetData,
       srcAmountInWei: eventTrade.args.srcAmount.toString(),
       srcAmountInBase: utils.formatUnits(eventTrade.args.srcAmount, srcAssetData.decimals).toString(),
-      destAmountInWei: eventTrade.args.destAmount.toString(),
-      destAmountInBase: utils.formatUnits(eventTrade.args.destAmount, destAssetData.decimals).toString(),
+      destAmountOutWei: eventTrade.args.destAmount.toString(),
+      destAmountOutBase: utils.formatUnits(eventTrade.args.destAmount, destAssetData.decimals).toString(),
       transactionFee: txFeeInBase
     }
 

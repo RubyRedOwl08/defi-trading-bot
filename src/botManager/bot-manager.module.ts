@@ -8,6 +8,7 @@ import { BotManagerController } from './bot-manager.controller'
 import { BotManagerTaskService } from './bot-manager.task'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { OrderbookRepository } from 'src/orderbook/orderbook.repository'
+import { TradebookModule } from 'src/tradebook/tradebook.module'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { OrderbookRepository } from 'src/orderbook/orderbook.repository'
     EthersConnectModule,
     UtilsModule,
     WardenswapModule,
+    TradebookModule,
     TypeOrmModule.forFeature([OrderbookRepository])
   ],
   providers: [BotManagerService, BotManagerTaskService],
