@@ -5,7 +5,7 @@ export type GetQuote = UnPromisify<ReturnType<typeof WardenBestRateSdk.prototype
 
 export enum MethodNameForTrade {
   TRADE_STRATEGIES = 'swap',
-  SPLIT_TRADES = 'swapSplit',
+  TRADE_SPLIT = 'swapSplit',
   TRADE_ETH_TO_WETH = 'tradeEthToWeth',
   TRADE_WETH_TO_ETH = 'tradeWethToEth'
 }

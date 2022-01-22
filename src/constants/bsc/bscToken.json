@@ -34,5 +34,12 @@
     "chainId": 56,
     "decimals": 18,
     "logoURI": "https://latteswap-asset.s3.ap-southeast-1.amazonaws.com/icons/tokens/lattev2.png"
+  },
+  {
+    "name": "Warden Token",
+    "symbol": "WAD",
+    "address": "0x0fEAdcC3824E7F3c12f40E324a60c23cA51627fc",
+    "chainId": 56,
+    "decimals": 18
   }
 ]

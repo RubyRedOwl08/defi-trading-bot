@@ -9,6 +9,7 @@ import { UtilsService } from 'src/utils/utils.service'
 import { GetQuote, MethodNameForTrade, TransactionReceiptData } from './interfaces/wardenswap.interface'
 import { NETWORK_CONSTANT } from 'src/constants'
 import { ApprovalState } from 'src/ethersConnect/interfaces/ethers.interface'
+import { GetPriceDto } from './dto/GetPriceDto'
 @Injectable()
 export class WardenswapService {
   private wardenBestRateSdk: WardenBestRateSdk
@@ -33,13 +34,25 @@ export class WardenswapService {
     return quote
   }
 
+  async getPriceSwap(getPriceDto: GetPriceDto) {
+    const srcTokenData = this.utilsService.getTokenData(getPriceDto.srcTokenAddress)
+    const destTokenData = this.utilsService.getTokenData(getPriceDto.destTokenAddress)
+
+    const srcAmountInWei = ethers.utils.parseUnits(getPriceDto.srcAmount, srcTokenData.decimals).toString()
+    this.logger.debug(`src amount - ${srcAmountInWei}`)
+    const bestRateResult = await this.getRate(getPriceDto.srcTokenAddress, getPriceDto.destTokenAddress, srcAmountInWei)
+    const amountOutBase = ethers.utils.formatUnits(bestRateResult.amountOut.toString(), destTokenData.decimals)
+    const priceSwap = new BigNumber(amountOutBase).div(getPriceDto.srcAmount).toString(10)
+    return { priceSwap }
+  }
+
   async tradeToken(tokenAAddress: string, tokenBAddress: string, tokenAAmountInWei: string) {
     this.logger.debug('Start trade')
     const wardenRounterAddress = NETWORK_CONSTANT[56].WARDEN_ROUTING_CONTRACT_ADDRESS
     const srcTokenData = this.utilsService.getTokenData(tokenAAddress)
     const destTokenData = this.utilsService.getTokenData(tokenBAddress)
 
-    const bestRateResult = await this.getRate(srcTokenData.address, destTokenData.address, tokenAAmountInWei, false)
+    const bestRateResult = await this.getRate(srcTokenData.address, destTokenData.address, tokenAAmountInWei, true)
 
     this.utilsService.checkBestRateAmountOut(bestRateResult, srcTokenData.symbol, destTokenData.symbol)
 
@@ -54,10 +67,17 @@ export class WardenswapService {
         bestRateResult
       )
     } else if (bestRateResult.type === 'split') {
-      throw Error('split not support')
+      methodName = MethodNameForTrade.TRADE_SPLIT
+      tradeArgs = this.generateDataForTradeSplit(
+        srcTokenData.address,
+        destTokenData.address,
+        tokenAAmountInWei,
+        bestRateResult
+      )
     } else {
       throw new Error(`Function getRate best rate type ${bestRateResult?.type} not support`)
     }
+    this.logger.debug(`Method name: ${methodName}`)
 
     if (getAddress(srcTokenData.address) === getAddress(NETWORK_CONSTANT[56].NATIVE_TOKEN.address)) {
       tradeArgs.push({ value: tokenAAmountInWei })
@@ -118,6 +138,40 @@ export class WardenswapService {
       this.ethersConnectService.botWalletAddress,
       NETWORK_CONSTANT[56].PARTNER_ID,
       '000' // Mock data
+    ]
+
+    return defaultArgs
+  }
+
+  private generateDataForTradeSplit(
+    tokenAAddress: string,
+    tokenBAddress: string,
+    tokenAAmountInWei: string,
+    bestRateResult: GetQuote
+  ) {
+    if (bestRateResult.type !== 'split') {
+      return
+    }
+    const priceSlippage = 10 // 10%
+    const tokenAChecksumAddress = getAddress(tokenAAddress)
+    const tokenBChecksumAddress = getAddress(tokenBAddress)
+    const minDestAmount = new BigNumber(bestRateResult.amountOut.toString())
+      .times(new BigNumber(100).minus(priceSlippage))
+      .idiv(100)
+      .toString(10)
+
+    const defaultArgs = [
+      bestRateResult.swapAddress,
+      bestRateResult.data,
+      bestRateResult.depositAddresses,
+      bestRateResult.volumns,
+      tokenAChecksumAddress,
+      tokenAAmountInWei,
+      tokenBChecksumAddress,
+      minDestAmount,
+      this.ethersConnectService.botWalletAddress,
+      NETWORK_CONSTANT[56].PARTNER_ID,
+      '000' // Mock data, imprement in the future
     ]
 
     return defaultArgs
