@@ -1,8 +1,9 @@
 import { Injectable, Logger, BadRequestException, NotFoundException } from '@nestjs/common'
+import { InjectConfig } from 'nestjs-config'
 import { UtilsService } from 'src/utils/utils.service'
 import { WardenswapService } from 'src/wardenswap/wardenswap.service'
 import { CreateOrderbookDto } from './dto/CreateOrderbookDto'
-import { OrderbookStatus, OrderbookType } from './interfaces/orderbook.interface'
+import { OrderbookEntityOptional, OrderbookStatus, OrderbookType } from './interfaces/orderbook.interface'
 import { OrderbookEntity } from './orderbook.entiry'
 import { OrderbookRepository } from './orderbook.repository'
 import { BigNumber } from 'bignumber.js'
@@ -14,6 +15,7 @@ import { EthersConnectService } from 'src/ethersConnect/ethers.service'
 export class OrderbookService {
   private logger = new Logger('OrderbookService')
   constructor(
+    @InjectConfig() private readonly config,
     private utilsService: UtilsService,
     private wardenSwapService: WardenswapService,
     private orderbookRepository: OrderbookRepository,
@@ -86,5 +88,12 @@ export class OrderbookService {
 
   async getOrderbookById(id: string): Promise<OrderbookEntity> {
     return this.orderbookRepository.getOrderbookById(id)
+  }
+
+  async cancleOrderbookById(orderbookId: string) {
+    const data: OrderbookEntityOptional = { status: OrderbookStatus.CANCELED, isOpen: false }
+    const OrderbookEntity = await this.orderbookRepository.updateOrderBookById(orderbookId, data)
+    this.config.set(`botManager.tasks.${orderbookId}.isRunEvent`, false)
+    return OrderbookEntity
   }
 }

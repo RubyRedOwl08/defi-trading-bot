@@ -37,12 +37,6 @@ export class OrderbookRepository extends Repository<OrderbookEntity> {
   }
 
   async updateOrderBookById(id: string, newData: OrderbookEntityOptional): Promise<OrderbookEntity> {
-    // Reflect.ownKeys(newData).forEach((key) => {
-    //   farm[key] = newData[key]
-    // })
-    // // farm.currentTask = newTask
-    // await this.save(farm)
-
     await this.update({ id }, newData)
     const orderbookNow = await this.getOrderbookById(id)
     return orderbookNow

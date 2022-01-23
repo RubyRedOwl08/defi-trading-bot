@@ -1,4 +1,4 @@
-import { Body, Param, Controller, Get, Post, Query } from '@nestjs/common'
+import { Body, Param, Controller, Get, Post, Query, Patch } from '@nestjs/common'
 import { BotManagerService } from 'src/botManager/bot-manager.service'
 import { CreateOrderbookDto } from './dto/CreateOrderbookDto'
 import { GetOrderbooksFilterDto } from './dto/GetOrderBooksFilterDto'
@@ -24,5 +24,10 @@ export class OrderbookController {
   @Get('/:id')
   getOrderbookById(@Param('id') id: string): Promise<OrderbookEntity> {
     return this.orderbookService.getOrderbookById(id)
+  }
+
+  @Patch('/:id/cancel')
+  cancleOrderbookByid(@Param('id') id: string) {
+    return this.orderbookService.cancleOrderbookById(id)
   }
 }
