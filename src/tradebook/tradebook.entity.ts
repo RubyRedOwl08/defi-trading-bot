@@ -21,8 +21,8 @@ export class TradebookEntity {
   @Column()
   executionDestAmountOutBase: string
 
-  // @Column()
-  // executionDestAmountOutUsd: string
+  @Column()
+  executionDestAmountOutUsd: string
 
   @Column()
   executionPrice: string
@@ -30,8 +30,8 @@ export class TradebookEntity {
   @Column()
   transactionFeeBase: string
 
-  // @Column()
-  // transactionFeeUsd: string
+  @Column()
+  transactionFeeUsd: string
 
   @Column()
   tradeType: TradebookType

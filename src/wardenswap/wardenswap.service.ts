@@ -6,10 +6,13 @@ import BigNumber from 'bignumber.js'
 import { getAddress } from 'nestjs-ethers'
 import { EthersConnectService } from 'src/ethersConnect/ethers.service'
 import { UtilsService } from 'src/utils/utils.service'
-import { GetQuote, MethodNameForTrade, TransactionReceiptData } from './interfaces/wardenswap.interface'
-import { NETWORK_CONSTANT } from 'src/constants'
+import { GetQuote, MethodNameForTrade, TransactionSummary, Token } from './interfaces/wardenswap.interface'
+import { NETWORK_CONSTANT, USD_AMOUNT_FOR_CALC_TOKEN_PRICE } from 'src/constants'
 import { ApprovalState } from 'src/ethersConnect/interfaces/ethers.interface'
 import { GetPriceDto } from './dto/GetPriceDto'
+import wardenRoutingAbi from '../contracts/abis/WardenRoutingAbi.json'
+const wardenRoutingInterface = new ethers.utils.Interface(wardenRoutingAbi)
+
 @Injectable()
 export class WardenswapService {
   private wardenBestRateSdk: WardenBestRateSdk
@@ -44,6 +47,25 @@ export class WardenswapService {
     const amountOutBase = ethers.utils.formatUnits(bestRateResult.amountOut.toString(), destTokenData.decimals)
     const priceSwap = new BigNumber(amountOutBase).div(getPriceDto.srcAmount).toString(10)
     return { priceSwap }
+  }
+
+  async getTokenPriceUsd(tokenAddress: string) {
+    const tokenData = this.utilsService.getTokenData(tokenAddress)
+    const stableCoin = NETWORK_CONSTANT[56].STABLE_COIN_TOKEN as Token
+    if (getAddress(stableCoin.address) === getAddress(tokenAddress)) {
+      return '1'
+    }
+    const usdAmountForCalcTokenPriceWei = utils
+      .parseUnits(USD_AMOUNT_FOR_CALC_TOKEN_PRICE.toString(), stableCoin.decimals)
+      .toString()
+
+    const bestRateResult = await this.getRate(stableCoin.address, tokenAddress, usdAmountForCalcTokenPriceWei)
+    this.utilsService.checkBestRateAmountOut(bestRateResult)
+
+    const amountOutBase = utils.formatUnits(bestRateResult.amountOut.toString(), tokenData.decimals).toString()
+    const priceUsd = new BigNumber(USD_AMOUNT_FOR_CALC_TOKEN_PRICE).div(amountOutBase).toString(10)
+
+    return priceUsd
   }
 
   async tradeToken(tokenAAddress: string, tokenBAddress: string, tokenAAmountInWei: string) {
@@ -104,7 +126,7 @@ export class WardenswapService {
     )) as TransactionResponse
     this.logger.debug('tran sactionResponse', transactionResponse)
     const transactionReceipt: TransactionReceipt = await transactionResponse.wait()
-    const transactionReceiptData = this.getTransactionReceiptData(transactionReceipt)
+    const transactionReceiptData = this.getTransactionSummary(transactionResponse, transactionReceipt)
     this.logger.debug('transactionReceiptData', transactionReceiptData)
 
     return transactionReceiptData
@@ -204,7 +226,10 @@ export class WardenswapService {
     }
   }
 
-  private getTransactionReceiptData(transactionReceipt: TransactionReceipt): TransactionReceiptData {
+  private getTransactionSummary(
+    transactionResponse: TransactionResponse,
+    transactionReceipt: TransactionReceipt
+  ): TransactionSummary {
     // @ts-ignore
     const eventTrade = transactionReceipt?.events.find((event) => event.event === 'Trade')
     const srcAssetData = this.utilsService.getTokenData(eventTrade.args.srcAsset)
@@ -213,8 +238,18 @@ export class WardenswapService {
       .times(ethers.utils.parseUnits('5', 'gwei').toString())
       .toString()
     const txFeeInBase = utils.formatEther(txFeeInWei)
-
-    const transactionReceiptData: TransactionReceiptData = {
+    console.log('transactionReceipt', transactionReceipt)
+    let tradeMethodName = ''
+    try {
+      const decodedInput = wardenRoutingInterface.parseTransaction({
+        data: transactionResponse.data,
+        value: transactionResponse.value
+      })
+      tradeMethodName = decodedInput.name
+    } catch (error) {
+      this.logger.error(error.message, error)
+    }
+    const transactionSummary: TransactionSummary = {
       transactionHash: transactionReceipt.transactionHash,
       srcAssetAddress: eventTrade.args.srcAsset,
       destAssetAddress: eventTrade.args.destAsset,
@@ -224,9 +259,10 @@ export class WardenswapService {
       srcAmountInBase: utils.formatUnits(eventTrade.args.srcAmount, srcAssetData.decimals).toString(),
       destAmountOutWei: eventTrade.args.destAmount.toString(),
       destAmountOutBase: utils.formatUnits(eventTrade.args.destAmount, destAssetData.decimals).toString(),
-      transactionFee: txFeeInBase
+      transactionFee: txFeeInBase,
+      tradeMethodName
     }
 
-    return transactionReceiptData
+    return transactionSummary
   }
 }

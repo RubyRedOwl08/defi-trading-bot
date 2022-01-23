@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common'
+import { Controller, Get, Query, Param } from '@nestjs/common'
 import { GetPriceDto } from './dto/GetPriceDto'
 import { WardenswapService } from './wardenswap.service'
 
@@ -8,5 +8,10 @@ export class WardenswapController {
   @Get('/price-swap')
   async getPrice(@Query() getPriceDto: GetPriceDto) {
     return this.wardenswapService.getPriceSwap(getPriceDto)
+  }
+
+  @Get('/test/:address')
+  async test(@Param('address') address: string) {
+    return this.wardenswapService.getTokenPriceUsd(address)
   }
 }

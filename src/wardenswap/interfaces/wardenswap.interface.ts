@@ -19,7 +19,7 @@ export interface Token {
   logoURI?: string | undefined
 }
 
-export interface TransactionReceiptData {
+export interface TransactionSummary {
   transactionHash: string
   srcAssetAddress: string
   destAssetAddress: string
@@ -30,4 +30,5 @@ export interface TransactionReceiptData {
   srcAssetData: Token
   destAssetData: Token
   transactionFee: string
+  tradeMethodName: string
 }

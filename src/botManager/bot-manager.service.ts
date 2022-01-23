@@ -11,7 +11,7 @@ import { OrderbookStatus } from 'src/orderbook/interfaces/orderbook.interface'
 import { OrderbookEntity } from 'src/orderbook/orderbook.entiry'
 import { EthersConnectService } from 'src/ethersConnect/ethers.service'
 import { TradebookService } from 'src/tradebook/tradebook.service'
-import { TransactionReceiptData } from 'src/wardenswap/interfaces/wardenswap.interface'
+import { TransactionSummary } from 'src/wardenswap/interfaces/wardenswap.interface'
 
 @Injectable()
 export class BotManagerService {
@@ -134,7 +134,7 @@ export class BotManagerService {
     }
   }
 
-  async swapTokenByOrderbookId(orderbookId: string, orderbookData?: OrderbookEntity): Promise<TransactionReceiptData> {
+  async swapTokenByOrderbookId(orderbookId: string, orderbookData?: OrderbookEntity): Promise<TransactionSummary> {
     if (!orderbookData) {
       orderbookData = await this.orderbookRepository.getOrderbookById(orderbookId)
     }
