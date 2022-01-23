@@ -112,12 +112,16 @@ export class EthersConnectService implements OnModuleInit {
     return wallet
   }
 
-  public async checkIsAllowanced(userAddr: string, tokenAddr: string, spenderAddress: string): Promise<ApprovalState> {
+  public async checkIsAllowanced(
+    userAddr: string,
+    tokenAddress: string,
+    spenderAddress: string
+  ): Promise<ApprovalState> {
     const nativeToken = NETWORK_CONSTANT[56].NATIVE_TOKEN
-    if (getAddress(tokenAddr) === getAddress(nativeToken.address)) {
+    if (getAddress(tokenAddress) === getAddress(nativeToken.address)) {
       return ApprovalState.APPROVED
     }
-    const tokenContract = this.getTokenContract(tokenAddr)
+    const tokenContract = this.getTokenContract(tokenAddress)
     const result = await tokenContract.allowance(userAddr, spenderAddress, {
       gasLimit: DEFAULT_GAS_LIMIT_FOR_READ_METHOD
     })
@@ -131,7 +135,7 @@ export class EthersConnectService implements OnModuleInit {
   async approveToken(tokenAddress: string, spenderAddress: string): Promise<TransactionResponse> {
     try {
       this.logger.debug(`ApproveToken ${tokenAddress}`)
-      const gasPrice = ethers.utils.parseUnits('5', 'gwei') // TODO: for bsc
+      const gasPrice = ethers.utils.parseUnits('5', 'gwei') // * For BSC chain
       const tokenContract = this.getTokenContract(tokenAddress)
 
       const estimatedGas = await this.utilsService.estimateGasForContract(tokenContract, 'approve', [

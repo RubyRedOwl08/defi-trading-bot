@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import bscToken from '../constants/bsc/bscToken.json'
+import bscTokenList from '../constants/bsc/bscTokenList.json'
 import erc20Abi from '../contracts/abis/erc20.json'
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
@@ -8,7 +8,7 @@ import { GetQuote } from '../wardenswap/interfaces/wardenswap.interface'
 @Injectable()
 export class UtilsService {
   getTokenData(search: string) {
-    const tokenData = bscToken.find((token) => {
+    const tokenData = bscTokenList.tokens.find((token) => {
       const searchUpperCase = search.toUpperCase()
       const isAddress = token.address.toUpperCase() === searchUpperCase
       const isSymbol = token.symbol.toUpperCase() === searchUpperCase

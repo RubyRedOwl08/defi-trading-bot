@@ -22,16 +22,16 @@ export class WardenswapService {
   }
 
   async getRate(
-    tokenAAddress: string,
-    tokenBAddress: string,
+    srcTokenAddress: string,
+    destTokenAddress: string,
     amountInWei: string,
     enableSplit = false
   ): Promise<GetQuote> {
     const quote = await this.wardenBestRateSdk.getQuote(
-      tokenAAddress,
-      tokenBAddress,
+      srcTokenAddress,
+      destTokenAddress,
       BigNumberForEthers.from(amountInWei),
-      ethers.utils.parseUnits('5', 'gwei'), // TODO: for bsc
+      ethers.utils.parseUnits('5', 'gwei'), // * For BSC chain
       { enableSplit: enableSplit }
     )
     return quote
@@ -68,13 +68,13 @@ export class WardenswapService {
     return priceUsd
   }
 
-  async tradeToken(tokenAAddress: string, tokenBAddress: string, tokenAAmountInWei: string) {
+  async tradeToken(srcTokenAddress: string, destTokenAddress: string, srcAmountInWei: string) {
     this.logger.debug('Start trade')
     const wardenRounterAddress = NETWORK_CONSTANT[56].WARDEN_ROUTING_CONTRACT_ADDRESS
-    const srcTokenData = this.utilsService.getTokenData(tokenAAddress)
-    const destTokenData = this.utilsService.getTokenData(tokenBAddress)
+    const srcTokenData = this.utilsService.getTokenData(srcTokenAddress)
+    const destTokenData = this.utilsService.getTokenData(destTokenAddress)
 
-    const bestRateResult = await this.getRate(srcTokenData.address, destTokenData.address, tokenAAmountInWei, true)
+    const bestRateResult = await this.getRate(srcTokenData.address, destTokenData.address, srcAmountInWei, true)
 
     this.utilsService.checkBestRateAmountOut(bestRateResult, srcTokenData.symbol, destTokenData.symbol)
 
@@ -85,7 +85,7 @@ export class WardenswapService {
       tradeArgs = this.generateDataForTradeStrategies(
         srcTokenData.address,
         destTokenData.address,
-        tokenAAmountInWei,
+        srcAmountInWei,
         bestRateResult
       )
     } else if (bestRateResult.type === 'split') {
@@ -93,7 +93,7 @@ export class WardenswapService {
       tradeArgs = this.generateDataForTradeSplit(
         srcTokenData.address,
         destTokenData.address,
-        tokenAAmountInWei,
+        srcAmountInWei,
         bestRateResult
       )
     } else {
@@ -102,7 +102,7 @@ export class WardenswapService {
     this.logger.debug(`Method name: ${methodName}`)
 
     if (getAddress(srcTokenData.address) === getAddress(NETWORK_CONSTANT[56].NATIVE_TOKEN.address)) {
-      tradeArgs.push({ value: tokenAAmountInWei })
+      tradeArgs.push({ value: srcAmountInWei })
     }
 
     this.logger.debug('check isAllowanced')
@@ -133,17 +133,17 @@ export class WardenswapService {
   }
 
   private generateDataForTradeStrategies(
-    tokenAAddress: string,
-    tokenBAddress: string,
-    tokenAAmountInWei: string,
+    srcTokenAddress: string,
+    destTokenAddress: string,
+    srcAmountInWei: string,
     bestRateResult: GetQuote
   ) {
     if (bestRateResult.type !== 'strategies') {
       return
     }
     const priceSlippage = 10 // 10%
-    const tokenAChecksumAddress = getAddress(tokenAAddress)
-    const tokenBChecksumAddress = getAddress(tokenBAddress)
+    const srcTokenChecksumAddress = getAddress(srcTokenAddress)
+    const destTokenChecksumAddress = getAddress(destTokenAddress)
     const minDestAmount = new BigNumber(bestRateResult.amountOut.toString())
       .times(new BigNumber(100).minus(priceSlippage))
       .idiv(100)
@@ -153,9 +153,9 @@ export class WardenswapService {
       bestRateResult.swapAddress,
       bestRateResult.data,
       bestRateResult.depositAddress,
-      tokenAChecksumAddress,
-      tokenAAmountInWei,
-      tokenBChecksumAddress,
+      srcTokenChecksumAddress,
+      srcAmountInWei,
+      destTokenChecksumAddress,
       minDestAmount,
       this.ethersConnectService.botWalletAddress,
       NETWORK_CONSTANT[56].PARTNER_ID,
@@ -166,17 +166,17 @@ export class WardenswapService {
   }
 
   private generateDataForTradeSplit(
-    tokenAAddress: string,
-    tokenBAddress: string,
-    tokenAAmountInWei: string,
+    srcTokenAddress: string,
+    destTokenAddress: string,
+    srcAmountInWei: string,
     bestRateResult: GetQuote
   ) {
     if (bestRateResult.type !== 'split') {
       return
     }
     const priceSlippage = 10 // 10%
-    const tokenAChecksumAddress = getAddress(tokenAAddress)
-    const tokenBChecksumAddress = getAddress(tokenBAddress)
+    const srcTokenChecksumAddress = getAddress(srcTokenAddress)
+    const destTokenChecksumAddress = getAddress(destTokenAddress)
     const minDestAmount = new BigNumber(bestRateResult.amountOut.toString())
       .times(new BigNumber(100).minus(priceSlippage))
       .idiv(100)
@@ -187,9 +187,9 @@ export class WardenswapService {
       bestRateResult.data,
       bestRateResult.depositAddresses,
       bestRateResult.volumns,
-      tokenAChecksumAddress,
-      tokenAAmountInWei,
-      tokenBChecksumAddress,
+      srcTokenChecksumAddress,
+      srcAmountInWei,
+      destTokenChecksumAddress,
       minDestAmount,
       this.ethersConnectService.botWalletAddress,
       NETWORK_CONSTANT[56].PARTNER_ID,

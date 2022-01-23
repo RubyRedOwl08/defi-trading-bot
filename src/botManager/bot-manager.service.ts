@@ -99,21 +99,21 @@ export class BotManagerService {
         this.logger.log(`activationPrice ==> ${orderbookData.activationPrice}`)
         this.logger.log(`priceNow ==> ${priceNow}`)
 
-        if (new BigNumber(orderbookData.tragetPrice).gte(orderbookData.activationPrice)) {
-          this.logger.log(`Condition pricenow >= ${orderbookData.tragetPrice}`)
+        if (new BigNumber(orderbookData.stopPrice).gte(orderbookData.activationPrice)) {
+          this.logger.log(`Condition pricenow >= ${orderbookData.stopPrice}`)
           if (
             new BigNumber(priceNow).gte(orderbookData.activationPrice) &&
-            new BigNumber(priceNow).gte(orderbookData.tragetPrice)
+            new BigNumber(priceNow).gte(orderbookData.stopPrice)
           ) {
             this.logger.log(`Orderbook id: ${orderbookId} stop limit !!`)
             await this.orderbookRepository.updateOrderBookById(orderbookId, { currentTask: BotManagerTask.SWAP_TOKEN })
             isLoopInterval = false
           }
         } else {
-          this.logger.log(`Condition pricenow <= ${orderbookData.tragetPrice}`)
+          this.logger.log(`Condition pricenow <= ${orderbookData.stopPrice}`)
           if (
             new BigNumber(priceNow).lte(orderbookData.activationPrice) &&
-            new BigNumber(priceNow).lte(orderbookData.tragetPrice)
+            new BigNumber(priceNow).lte(orderbookData.stopPrice)
           ) {
             this.logger.log(`Orderbook id: ${orderbookId} stop limit !!`)
             await this.orderbookRepository.updateOrderBookById(orderbookId, { currentTask: BotManagerTask.SWAP_TOKEN })
@@ -139,7 +139,6 @@ export class BotManagerService {
       orderbookData = await this.orderbookRepository.getOrderbookById(orderbookId)
     }
     const srcTokenData = this.utilsService.getTokenData(orderbookData.srcTokenAddress)
-    // TODO: should change name
     const srcAmountInWei = ethers.utils.parseUnits(orderbookData.srcAmountInBase, srcTokenData.decimals).toString()
 
     await this.orderbookRepository.updateOrderBookById(orderbookId, { status: OrderbookStatus.PENDING })
@@ -173,7 +172,6 @@ export class BotManagerService {
 
       console.log('transactionReceiptData', JSON.stringify(transactionReceiptData, null, 4))
       return transactionReceiptData
-      // TODO: store trade book
     } catch (error) {
       this.logger.error(error.message)
       await this.orderbookRepository.updateOrderBookById(orderbookId, {

@@ -16,7 +16,7 @@ export class CreateOrderbookDto {
 
   @IsNumberString()
   @IsOptional()
-  tragetPrice: string
+  stopPrice: string
 
   @IsNotEmpty()
   orderType: OrderbookType

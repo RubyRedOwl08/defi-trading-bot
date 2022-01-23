@@ -35,7 +35,7 @@ export class OrderbookEntity {
   currentTask: BotManagerTask
 
   @Column({ nullable: true })
-  tragetPrice: string
+  stopPrice: string
 
   @Column()
   activationPrice: string
