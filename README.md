@@ -62,6 +62,23 @@ $ npm run test:cov
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
+## ENV File
+
+| Name                        | Description                                 |
+| --------------------------- | ------------------------------------------- |
+| USE_WALLET_TYPE             |                                             |
+| WALLET_PRIVATE_KEY          | Private key of wallet                       |
+| WALLET_ENCRYPT_BASE64       | Encryption private key from aws kms         |
+| POSTGRES_HOST               |                                             |
+| POSTGRES_PORT               |                                             |
+| POSTGRES_USERNAME           |                                             |
+| POSTGRES_PASSWORD           |                                             |
+| POSTGRES_DATABASE           |                                             |
+| POSTGRES_AUTO_LOAD_ENTITIES |                                             |
+| POSTGRES_SYNCHRONIZE        |                                             |
+| AWS_CREDENTIAL_PROFILE_NAME | AWS CLI profile name                        |
+| AWS_KMS_KEY_ID              | AWS KMS keyid for encryption and decryption |
+
 ## POST /orderbook
 
 Crarte order book
@@ -100,12 +117,11 @@ Crarte order book
 | ------- | ------ | ---- | ------------------------- |
 | orderId | string | path | Cancle order form orderId |
 
-
-
 ```diff
 - test
 + test2
 ```
+
 ## License
 
 Nest is [MIT licensed](LICENSE).
