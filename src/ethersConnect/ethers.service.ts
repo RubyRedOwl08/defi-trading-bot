@@ -26,7 +26,7 @@ import { GenWalletType } from './interfaces/ethers.interface'
 export class EthersConnectService implements OnModuleInit {
   public wardenRoutingContract: Contract
   public botWalletAddress
-  public wallet: Wallet
+  private wallet: Wallet
   private logger = new Logger('EthersConnectService')
   constructor(
     @InjectEthersProvider()
@@ -87,8 +87,9 @@ export class EthersConnectService implements OnModuleInit {
   }
 
   private async manageWallet() {
-    const genWalletType = this.configService.get<GenWalletType>('GEN_WALLET_TYPE')
-    const tempFile = { walletPrivateKey: null }
+    const genWalletType = this.configService.get<GenWalletType>('USE_WALLET_TYPE')
+    const tempFile = { walletPrivateKey: null, decryptResponse: null }
+
     switch (genWalletType) {
       case GenWalletType.PRIVATE_KEY:
         tempFile.walletPrivateKey = this.configService.get<string>('WALLET_PRIVATE_KEY')
@@ -97,8 +98,8 @@ export class EthersConnectService implements OnModuleInit {
         const params = {
           CiphertextBlob: Buffer.from(this.configService.get<string>('WALLET_ENCRYPT_BASE64'), 'base64')
         }
-        const decryptResponse: KMS.DecryptResponse = await this.utilsService.myPromise(this.kms, 'decrypt', params)
-        tempFile.walletPrivateKey = decryptResponse.Plaintext.toString('utf-8')
+        tempFile.decryptResponse = await this.utilsService.myPromise(this.kms, 'decrypt', params)
+        tempFile.walletPrivateKey = tempFile.decryptResponse.Plaintext.toString('utf-8')
         break
       }
       default:
@@ -107,6 +108,7 @@ export class EthersConnectService implements OnModuleInit {
     const wallet = this.getWallet(tempFile.walletPrivateKey)
 
     // Remove from memory
+    delete tempFile.decryptResponse
     delete tempFile.walletPrivateKey
 
     return wallet

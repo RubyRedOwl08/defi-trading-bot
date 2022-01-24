@@ -14,7 +14,7 @@ import { AwsSdkConfigServices } from './awsSdkConfig/aws-sdk-config.service'
 import { AwsSdkConfigModule } from './awsSdkConfig/aws-sdk-config.module'
 import { BotManagerModule } from './botManager/bot-manager.module'
 import { OrderbookModule } from './orderbook/orderbook.module'
-import { TradebookModule } from './tradebook/tradebook.module';
+import { TradebookModule } from './tradebook/tradebook.module'
 
 @Module({
   imports: [

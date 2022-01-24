@@ -62,12 +62,50 @@ $ npm run test:cov
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+## POST /orderbook
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Crarte order book
 
+| Name             | Type   | In   | Description                          |
+| ---------------- | ------ | ---- | ------------------------------------ |
+| srcTokenAddress  | string | body | Source token address to swap         |
+| destTokenAddress | string | body | Destination token address to receive |
+| srcAmount        | string | body | Amount of source token to swap       |
+| orderType        | string | body |                                      |
+| stopPrice        | string | body |                                      |
+
+## GET /orderbook
+
+| Name        | Type   | In    | Description |
+| ----------- | ------ | ----- | ----------- |
+| orderStatus | string | query |             |
+
+## GET /orderbook/{orderId}
+
+| Name    | Type   | In   | Description                     |
+| ------- | ------ | ---- | ------------------------------- |
+| orderId | string | path | Get orderbook data from orderId |
+
+## GET /wardenswap/price-swap
+
+| Name             | Type   | In    | Description                          |
+| ---------------- | ------ | ----- | ------------------------------------ |
+| srcTokenAddress  | string | query | Source token address to swap         |
+| destTokenAddress | string | query | Destination token address to receive |
+| srcAmount        | string | query | Amount of source token to swap       |
+
+## PATCH /orderbook/{orderId}/cancel
+
+| Name    | Type   | In   | Description               |
+| ------- | ------ | ---- | ------------------------- |
+| orderId | string | path | Cancle order form orderId |
+
+
+
+```diff
+- test
++ test2
+```
 ## License
 
 Nest is [MIT licensed](LICENSE).
