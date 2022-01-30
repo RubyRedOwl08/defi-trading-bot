@@ -77,7 +77,7 @@ export class BotManagerService {
     while (isLoopInterval) {
       try {
         const isTaskRunEvent = this.config.get(`botManager.tasks.${orderbookId}.isRunEvent`)
-        this.logger.debug(`isTaskRunEvent ${orderbookId} | ${isTaskRunEvent}`)
+        // this.logger.debug(`isTaskRunEvent ${orderbookId} | ${isTaskRunEvent}`)
         if (!isTaskRunEvent) {
           this.config.set(`botManager.tasks.${orderbookId}.isRunEvent`, false)
           isLoopInterval = false
@@ -96,11 +96,13 @@ export class BotManagerService {
 
         const priceNow = new BigNumber(bestRateAmountOutInBase).div(orderbookData.srcAmountInBase).toString(10)
         this.logger.log('---------------------------------------------------------')
-        this.logger.log(`activationPrice ==> ${orderbookData.activationPrice}`)
-        this.logger.log(`priceNow ==> ${priceNow}`)
+        this.logger.log(`Order id: ${orderbookData.id}`)
+        this.logger.log(`Trade pair: ${orderbookData.srcTokenSymbol}-${orderbookData.destTokenSymbol} |`)
+        this.logger.log(`Activation price: ${orderbookData.activationPrice}`)
+        this.logger.log(`Current price: ${priceNow}`)
 
         if (new BigNumber(orderbookData.stopPrice).gte(orderbookData.activationPrice)) {
-          this.logger.log(`Condition pricenow >= ${orderbookData.stopPrice}`)
+          this.logger.log(`Condition stop price >= ${orderbookData.stopPrice}`)
           if (
             new BigNumber(priceNow).gte(orderbookData.activationPrice) &&
             new BigNumber(priceNow).gte(orderbookData.stopPrice)
@@ -110,7 +112,7 @@ export class BotManagerService {
             isLoopInterval = false
           }
         } else {
-          this.logger.log(`Condition pricenow <= ${orderbookData.stopPrice}`)
+          this.logger.log(`Condition stop price <= ${orderbookData.stopPrice}`)
           if (
             new BigNumber(priceNow).lte(orderbookData.activationPrice) &&
             new BigNumber(priceNow).lte(orderbookData.stopPrice)

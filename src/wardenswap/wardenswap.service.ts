@@ -37,7 +37,7 @@ export class WardenswapService {
     return quote
   }
 
-  async getPriceSwap(getPriceDto: GetPriceDto) {
+  async getCurrentPrice(getPriceDto: GetPriceDto) {
     const srcTokenData = this.utilsService.getTokenData(getPriceDto.srcTokenAddress)
     const destTokenData = this.utilsService.getTokenData(getPriceDto.destTokenAddress)
 
@@ -45,8 +45,9 @@ export class WardenswapService {
     this.logger.debug(`src amount - ${srcAmountInWei}`)
     const bestRateResult = await this.getRate(getPriceDto.srcTokenAddress, getPriceDto.destTokenAddress, srcAmountInWei)
     const amountOutBase = ethers.utils.formatUnits(bestRateResult.amountOut.toString(), destTokenData.decimals)
-    const priceSwap = new BigNumber(amountOutBase).div(getPriceDto.srcAmount).toString(10)
-    return { priceSwap }
+    const currentPrice = new BigNumber(amountOutBase).div(getPriceDto.srcAmount).toString(10)
+
+    return { currentPrice }
   }
 
   async getTokenPriceUsd(tokenAddress: string) {
