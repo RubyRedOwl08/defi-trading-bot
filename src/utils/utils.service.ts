@@ -19,7 +19,6 @@ export class UtilsService {
     return tokenData
   }
 
-  // add 25%
   calculateGasMargin(value: string | number): string {
     return new BigNumber(value).multipliedBy('1.25').toFixed(0)
   }
@@ -28,6 +27,7 @@ export class UtilsService {
     try {
       const inter = new ethers.utils.Interface(erc20Abi)
       const logData = inter.parseLog(eventLog)
+
       return logData
     } catch (error) {
       console.log('error', error)

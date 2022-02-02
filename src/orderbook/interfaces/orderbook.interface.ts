@@ -1,7 +1,6 @@
 export enum OrderbookType {
   MARKET = 'MARKET',
-  STOP_LIMIT = 'STOP_LIMIT',
-  OCO = 'OCO'
+  STOP_LIMIT = 'STOP_LIMIT'
 }
 
 export enum OrderbookStatus {

@@ -14,7 +14,7 @@ async function bootstrap() {
 }
 
 process.on('unhandledRejection', (error) => {
-  console.log('unhandledRejection Top level error', error)
+  console.log('unhandledRejection low level error', error)
   process.exit(1)
 })
 

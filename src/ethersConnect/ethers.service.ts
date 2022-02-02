@@ -136,7 +136,7 @@ export class EthersConnectService implements OnModuleInit {
 
   async approveToken(tokenAddress: string, spenderAddress: string): Promise<TransactionResponse> {
     try {
-      this.logger.debug(`ApproveToken ${tokenAddress}`)
+      this.logger.log(`Approve ${tokenAddress} token`)
       const gasPrice = ethers.utils.parseUnits('5', 'gwei') // * For BSC chain
       const tokenContract = this.getTokenContract(tokenAddress)
 
@@ -150,12 +150,9 @@ export class EthersConnectService implements OnModuleInit {
       })
       return transactionResponse
     } catch (error) {
-      if (error.message.includes('User denied transaction signature')) {
-        this.logger.error('ApproveToken transaction rejected', error)
-      } else {
-        this.logger.error('Function approveToken', error)
-      }
-      throw new Error(`Approve Token error: ${error.message}`)
+      this.logger.error('Function approveToken', error)
+
+      throw new Error(`Approve token error: ${error.message}`)
     }
   }
 }

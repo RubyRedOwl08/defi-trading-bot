@@ -3,17 +3,12 @@ import { MethodNameForTrade, TransactionSummary } from 'src/wardenswap/interface
 import { TradebookEntityOptional, TradebookType } from './interfaces/tradebook.interface'
 import BigNumber from 'bignumber.js'
 import { TradebookRepository } from './tradebook.repository'
-import { UtilsService } from 'src/utils/utils.service'
 import { WardenswapService } from 'src/wardenswap/wardenswap.service'
 import { NETWORK_CONSTANT } from '../constants'
 @Injectable()
 export class TradebookService {
   private logger = new Logger('TradebookService')
-  constructor(
-    private utilsService: UtilsService,
-    private tradebookRepository: TradebookRepository,
-    private wardenswapService: WardenswapService
-  ) {}
+  constructor(private tradebookRepository: TradebookRepository, private wardenswapService: WardenswapService) {}
 
   async createTradebook(transactionSummary: TransactionSummary, orderbookId) {
     const executionPrice = new BigNumber(transactionSummary.destAmountOutBase)
@@ -45,7 +40,7 @@ export class TradebookService {
       tradeType
     }
     const TradebookEntity = await this.tradebookRepository.createTradebook(expectedTradeData, orderbookId)
-    this.logger.log(`Tradebook success`)
+    this.logger.log(`Create trade book success`)
     return TradebookEntity
   }
 }

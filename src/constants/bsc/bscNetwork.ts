@@ -1,8 +1,7 @@
 const data = {
-  // TODO: for test
   RPC_OFFICIAL_URL: 'https://bsc-dataseed.binance.org/',
   WARDEN_ROUTING_CONTRACT_ADDRESS: '0x451ef8D6B645a60115EB8b8bEa76B39C0C761004',
-  PARTNER_ID: '5',
+  PARTNER_ID: '5', // You can change your "partner id"
   NATIVE_TOKEN: {
     name: 'BNB Token',
     symbol: 'BNB',

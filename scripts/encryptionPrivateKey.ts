@@ -9,7 +9,7 @@ dotenv.config({ path: envPath })
 const kms = new aws.KMS({
   region: 'ap-southeast-1',
   credentials: new SharedIniFileCredentials({
-    profile: 'defi-trading-bot'
+    profile: process.env.AWS_CREDENTIAL_PROFILE_NAME
   })
 })
 
@@ -46,5 +46,6 @@ function ensureDirectoryExistence(filePath: string) {
   const exportDataFilePath = path.join(__dirname, '../resultFromScripts/encryptData.txt')
   ensureDirectoryExistence(exportDataFilePath)
   fs.writeFileSync(path.join(__dirname, '../resultFromScripts/encryptData.txt'), dataHex)
+
   console.log('End process encrypt private key')
 })()

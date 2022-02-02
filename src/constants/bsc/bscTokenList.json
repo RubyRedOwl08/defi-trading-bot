@@ -1,8 +1,12 @@
 {
   "name": "WardenSwap BSC",
-  "timestamp": "2022-01-20T06:54:23.661Z",
-  "version": { "major": 1, "minor": 4, "patch": 0 },
-  "logoURI": "https://file-utility-alpha.wardenswap.finance/wardenswap-logo.png",
+  "timestamp": "2022-01-28T06:32:15.303Z",
+  "version": {
+    "major": 1,
+    "minor": 4,
+    "patch": 0
+  },
+  "logoURI": "https://file-utility.wardenswap.finance/wardenswap-logo.png",
   "keywords": ["WardenSwap", "bsc"],
   "tokens": [
     {
@@ -11,7 +15,7 @@
       "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/bnb.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/bnb.png"
     },
     {
       "name": "Warden Token",
@@ -755,7 +759,7 @@
       "address": "0x070a9867Ea49CE7AFc4505817204860e823489fE",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/six.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/six.png"
     },
     {
       "name": "Definix Token",
@@ -763,7 +767,7 @@
       "address": "0x0f02b1f5af54e04fb6dd6550f009ac2429c4e30d",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/finix.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/finix.png"
     },
     {
       "name": "Tokocrypto Token",
@@ -787,7 +791,7 @@
       "address": "0xf8E026dC4C0860771f691EcFFBbdfe2fa51c77CF",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/bgov.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/bgov.png"
     },
     {
       "name": "Binance-Peg Dogecoin",
@@ -867,7 +871,7 @@
       "address": "0xa4f93159ce0a4b533b443c74b89967c60a5969f8",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/bft.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/bft.png"
     },
     {
       "name": "SafeBSC Token",
@@ -875,7 +879,7 @@
       "address": "0x39f1014a88c8ec087cedf1bfc7064d24f507b894",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/scz.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/scz.png"
     },
     {
       "name": "Poly-Peg MDX Token",
@@ -883,7 +887,7 @@
       "address": "0xAEE4164c1ee46ed0bbC34790f1a3d1Fc87796668",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/hmdx.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/hmdx.png"
     },
     {
       "name": "dego.finance Token",
@@ -923,7 +927,7 @@
       "address": "0xff54da7caf3bc3d34664891fc8f3c9b6dea6c7a5",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/dolly.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/dolly.png"
     },
     {
       "name": "ZMINE Token",
@@ -931,7 +935,7 @@
       "address": "0xFCb8a4B1a0B645e08064e05B98E9cc6f48D2aa57",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/zmn.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/zmn.png"
     },
     {
       "name": "Infinitee Token",
@@ -939,7 +943,7 @@
       "address": "0xC350CAA89EB963D5D6B964324A0A7736D8D65533",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/inftee.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/inftee.png"
     },
     {
       "name": "Twin Token",
@@ -947,7 +951,7 @@
       "address": "0x3806aae953a3a873D02595f76C7698a57d4C7A57",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/twin.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/twin.png"
     },
     {
       "name": "ZFARM Token",
@@ -955,7 +959,7 @@
       "address": "0x42d1B21EaBE04D308148eA9Ab90Be674b64b4eef",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/zfarm.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/zfarm.png"
     },
     {
       "name": "WaultSwap Token",
@@ -979,7 +983,7 @@
       "address": "0x73280E2951785F17Acc6Cb2A1D0C4d65031D54B3",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/fat.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/fat.png"
     },
     {
       "name": "Leaf Token",
@@ -987,7 +991,7 @@
       "address": "0x1CbDdf83De068464Eba3a4E319bd3197a7EEa12c",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/leaf.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/leaf.png"
     },
     {
       "name": "Biswap Token",
@@ -1139,7 +1143,7 @@
       "address": "0x99e92123eB77Bc8f999316f622e5222498438784",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/gmt.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/gmt.png"
     },
     {
       "name": "Dopple Exchange Token",
@@ -1147,7 +1151,7 @@
       "address": "0x802a183ac9f6b082716dfee55432ed0c04acb49a",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/dopx.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/dopx.png"
     },
     {
       "name": "Nafter Token",
@@ -1179,7 +1183,7 @@
       "address": "0x3c1748d647e6a56b37b66fcd2b5626d0461d3aa0",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/dnxc.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/dnxc.png"
     },
     {
       "name": "Wall Street Games Token",
@@ -1195,7 +1199,7 @@
       "address": "0xedecfb4801c04f3eb394b89397c6aafa4adda15b",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/pyram.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/pyram.png"
     },
     {
       "name": "Radio Caca V2",
@@ -1243,7 +1247,7 @@
       "address": "0xe9d7023f2132d55cbd4ee1f78273cb7a3e74f10a",
       "chainId": 56,
       "decimals": 3,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/dec.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/dec.png"
     },
     {
       "name": "BinaryX Token",
@@ -1283,7 +1287,7 @@
       "address": "0xb3a6381070b1a15169dea646166ec0699fdaea79",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/gold.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/gold.png"
     },
     {
       "name": "Tokyo AU Token",
@@ -1307,7 +1311,7 @@
       "address": "0x50332bdca94673f33401776365b66cc4e81ac81d",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://tokens.pancakeswap.finance/images/0x50332bdca94673F33401776365b66CC4e81aC81d.png"
+      "logoURI": "https://assets.trustwalletapp.com/blockchains/smartchain/assets/0x50332bdca94673F33401776365b66CC4e81aC81d/logo.png"
     },
     {
       "name": "ZooToken",
@@ -1387,7 +1391,7 @@
       "address": "0x74926b3d118a63f6958922d3dc05eb9c6e6e00c6",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/doggy.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/doggy.png"
     },
     {
       "name": "WIZARD Token",
@@ -1403,7 +1407,7 @@
       "address": "0xad29abb318791d579433d831ed122afeaf29dcfe",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/ftm.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/ftm.png"
     },
     {
       "name": "Exeedme Token",
@@ -1419,7 +1423,7 @@
       "address": "0xa16976133D3450f78766ECaa1d743621E237e1A5",
       "chainId": 56,
       "decimals": 9,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/sugar.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/sugar.png"
     },
     {
       "name": "Moonpot Token",
@@ -1467,7 +1471,7 @@
       "address": "0x118b60763002f3ba7603a3c17f946a0c7dab789f",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/pearl.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/pearl.png"
     },
     {
       "name": "Travala.com Token",
@@ -1507,7 +1511,7 @@
       "address": "0x633237C6FA30FAe46Cc5bB22014DA30e50a718cC",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/fiwa.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/fiwa.png"
     },
     {
       "name": "LATTE Token",
@@ -1555,7 +1559,7 @@
       "address": "0x8e8538c75f273ab2df6adeecd3622a9c314fccf3",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/sishi.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/sishi.png"
     },
     {
       "name": "Binance-Peg SHIBA INU Token",
@@ -1747,7 +1751,7 @@
       "address": "0x50e756a22ff5cee3559d18b9d9576bc38f09fa7c",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/wars.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/wars.png"
     },
     {
       "name": "AcknoLedger Token",
@@ -1755,7 +1759,7 @@
       "address": "0xf7b5fb4607abfe0ecf332c23cbdcc9e425b443a8",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/ack.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/ack.png"
     },
     {
       "name": "LFG Token",
@@ -1947,7 +1951,7 @@
       "address": "0xd3c9609b6cbc6ef02390f33c230590c38f9e5f9d",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/prot.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/prot.png"
     },
     {
       "name": "Zodiacs Token",
@@ -2459,7 +2463,7 @@
       "address": "0x1De4dDc38d885ea11F304b0b7884b6F1F069616f",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/dg.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/dg.png"
     },
     {
       "name": "Bemil Token",
@@ -2579,7 +2583,7 @@
       "address": "0x12FC07081Fab7DE60987cAd8E8dc407B606FB2F8",
       "chainId": 56,
       "decimals": 8,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/dark.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/dark.png"
     },
     {
       "name": "HUGHUG Token",
@@ -2827,7 +2831,7 @@
       "address": "0xd07e82440A395f3F3551b42dA9210CD1Ef4f8B24",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://assets.coingecko.com/coins/images/22064/small/prl.png?1640744907"
+      "logoURI": "https://tokens.pancakeswap.finance/images/0xd07e82440A395f3F3551b42dA9210CD1Ef4f8B24.png"
     },
     {
       "name": "NAOSToken",
@@ -2979,7 +2983,7 @@
       "address": "0xC9882dEF23bc42D53895b8361D0b1EDC7570Bc6A",
       "chainId": 56,
       "decimals": 6,
-      "logoURI": "https://file-utility-alpha.wardenswap.finance/tokenlogos/fist.png"
+      "logoURI": "https://file-utility.wardenswap.finance/tokenlogos/fist.png"
     },
     {
       "name": "lizardtoken.finance",

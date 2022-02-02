@@ -1,4 +1,4 @@
-import { Injectable, Logger, BadRequestException, NotFoundException } from '@nestjs/common'
+import { Injectable, Logger, BadRequestException } from '@nestjs/common'
 import { InjectConfig } from 'nestjs-config'
 import { UtilsService } from 'src/utils/utils.service'
 import { WardenswapService } from 'src/wardenswap/wardenswap.service'
@@ -27,15 +27,14 @@ export class OrderbookService {
     const destTokenData = this.utilsService.getTokenData(createOrderbookDto.destTokenAddress)
 
     const srcAmountInWei = ethers.utils.parseUnits(createOrderbookDto.srcAmount, srcTokenData.decimals).toString()
-    console.log('srcAmountInWei', srcAmountInWei)
     const srcTokenBalanceInWei = await this.ethersConnectService.getBalanceOfTokenWithAddrss(
       createOrderbookDto.srcTokenAddress
     )
-    this.logger.debug(
-      `Token ${srcTokenData.symbol} balance = ${ethers.utils.formatUnits(srcTokenBalanceInWei, srcTokenData.decimals)}`
+    this.logger.log(
+      `${srcTokenData.symbol} token balance = ${ethers.utils.formatUnits(srcTokenBalanceInWei, srcTokenData.decimals)}`
     )
     if (new BigNumber(srcAmountInWei).gt(srcTokenBalanceInWei)) {
-      throw new BadRequestException(`Token ${srcTokenData.symbol} balance not enough`)
+      throw new BadRequestException(`${srcTokenData.symbol} token balance not enough`)
     }
 
     const bestRateResult = await this.wardenSwapService.getRate(
@@ -45,11 +44,8 @@ export class OrderbookService {
     )
 
     const amountOutInBase = ethers.utils.formatUnits(bestRateResult.amountOut.toString(), destTokenData.decimals)
-
     this.utilsService.checkBestRateAmountOut(bestRateResult, srcTokenData.symbol, destTokenData.symbol)
-
     const activationPrice = new BigNumber(amountOutInBase).div(createOrderbookDto.srcAmount).toString(10)
-    console.log('activationPrice ==>', activationPrice)
     let currentTask: BotManagerTask
 
     switch (createOrderbookDto.orderType) {
@@ -78,7 +74,6 @@ export class OrderbookService {
       },
       createOrderbookDto
     )
-    this.logger.debug('Test create', orderbookDataAddon)
     return this.orderbookRepository.createOrderbook(orderbookDataAddon)
   }
 
@@ -94,6 +89,7 @@ export class OrderbookService {
     const data: OrderbookEntityOptional = { status: OrderbookStatus.CANCELED, isOpen: false }
     const OrderbookEntity = await this.orderbookRepository.updateOrderBookById(orderbookId, data)
     this.config.set(`botManager.tasks.${orderbookId}.isRunEvent`, false)
+
     return OrderbookEntity
   }
 }

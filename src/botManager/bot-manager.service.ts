@@ -44,7 +44,7 @@ export class BotManagerService {
       return
     }
 
-    this.logger.log('Start orderbook id: ==>', orderbookId)
+    this.logger.log('Start orderbook id: ', orderbookId)
     switch (orderbookData.currentTask) {
       case BotManagerTask.CHECK_PRICE:
         await this.checkPriceByOrderId(orderbookId)
@@ -62,7 +62,6 @@ export class BotManagerService {
   }
 
   async checkPriceByOrderId(orderbookId: string, orderbookData?: OrderbookEntity) {
-    this.logger.debug('go to watcher')
     this.botManagerTaskService.emitBotManagerTask(orderbookId, BotManagerTask.CHECK_PRICE)
     let isLoopInterval = true
 
@@ -77,7 +76,6 @@ export class BotManagerService {
     while (isLoopInterval) {
       try {
         const isTaskRunEvent = this.config.get(`botManager.tasks.${orderbookId}.isRunEvent`)
-        // this.logger.debug(`isTaskRunEvent ${orderbookId} | ${isTaskRunEvent}`)
         if (!isTaskRunEvent) {
           this.config.set(`botManager.tasks.${orderbookId}.isRunEvent`, false)
           isLoopInterval = false
@@ -137,6 +135,7 @@ export class BotManagerService {
   }
 
   async swapTokenByOrderbookId(orderbookId: string, orderbookData?: OrderbookEntity): Promise<TransactionSummary> {
+    this.logger.log('Start process swap token')
     if (!orderbookData) {
       orderbookData = await this.orderbookRepository.getOrderbookById(orderbookId)
     }
@@ -144,14 +143,13 @@ export class BotManagerService {
     const srcAmountInWei = ethers.utils.parseUnits(orderbookData.srcAmountInBase, srcTokenData.decimals).toString()
 
     await this.orderbookRepository.updateOrderBookById(orderbookId, { status: OrderbookStatus.PENDING })
-    this.logger.log('Swap now')
 
     try {
       const srcTokenBalanceInWei = await this.ethersConnectService.getBalanceOfTokenWithAddrss(
         orderbookData.srcTokenAddress
       )
-      this.logger.debug(
-        `Token ${srcTokenData.symbol} balance = ${ethers.utils.formatUnits(
+      this.logger.log(
+        `${srcTokenData.symbol} token balance = ${ethers.utils.formatUnits(
           srcTokenBalanceInWei,
           srcTokenData.decimals
         )}`
@@ -172,7 +170,7 @@ export class BotManagerService {
         status: OrderbookStatus.SUCCESS
       })
 
-      console.log('transactionReceiptData', JSON.stringify(transactionReceiptData, null, 4))
+      this.logger.log('Transaction receipt data', JSON.stringify(transactionReceiptData, null, 4))
       return transactionReceiptData
     } catch (error) {
       this.logger.error(error.message)

@@ -40,9 +40,8 @@ export class WardenswapService {
   async getCurrentPrice(getPriceDto: GetPriceDto) {
     const srcTokenData = this.utilsService.getTokenData(getPriceDto.srcTokenAddress)
     const destTokenData = this.utilsService.getTokenData(getPriceDto.destTokenAddress)
-
     const srcAmountInWei = ethers.utils.parseUnits(getPriceDto.srcAmount, srcTokenData.decimals).toString()
-    this.logger.debug(`src amount - ${srcAmountInWei}`)
+
     const bestRateResult = await this.getRate(getPriceDto.srcTokenAddress, getPriceDto.destTokenAddress, srcAmountInWei)
     const amountOutBase = ethers.utils.formatUnits(bestRateResult.amountOut.toString(), destTokenData.decimals)
     const currentPrice = new BigNumber(amountOutBase).div(getPriceDto.srcAmount).toString(10)
@@ -70,7 +69,6 @@ export class WardenswapService {
   }
 
   async tradeToken(srcTokenAddress: string, destTokenAddress: string, srcAmountInWei: string) {
-    this.logger.debug('Start trade')
     const wardenRounterAddress = NETWORK_CONSTANT[56].WARDEN_ROUTING_CONTRACT_ADDRESS
     const srcTokenData = this.utilsService.getTokenData(srcTokenAddress)
     const destTokenData = this.utilsService.getTokenData(destTokenAddress)
@@ -100,35 +98,32 @@ export class WardenswapService {
     } else {
       throw new Error(`Function getRate best rate type ${bestRateResult?.type} not support`)
     }
-    this.logger.debug(`Method name: ${methodName}`)
+    this.logger.log(`Trade method name: ${methodName}`)
 
     if (getAddress(srcTokenData.address) === getAddress(NETWORK_CONSTANT[56].NATIVE_TOKEN.address)) {
       tradeArgs.push({ value: srcAmountInWei })
     }
 
-    this.logger.debug('check isAllowanced')
+    this.logger.log('Check isAllowanced')
     const approvalState = await this.ethersConnectService.checkIsAllowanced(
       this.ethersConnectService.botWalletAddress,
       srcTokenData.address,
       wardenRounterAddress
     )
-    this.logger.debug('approvalState', approvalState)
+    this.logger.log(`Approval State ${approvalState}`)
     if (approvalState === ApprovalState.NOT_APPROVED) {
       await this.ethersConnectService.approveToken(srcTokenData.address, wardenRounterAddress)
-      this.logger.debug('Delay 15s')
+      this.logger.log('Delay 15s')
       await this.utilsService.delay(1000 * 15)
     }
 
-    this.logger.debug('callMehodTrade')
     const transactionResponse = (await this.callMehodTrade(
       this.ethersConnectService.wardenRoutingContract,
       methodName,
       tradeArgs
     )) as TransactionResponse
-    this.logger.debug('tran sactionResponse', transactionResponse)
     const transactionReceipt: TransactionReceipt = await transactionResponse.wait()
     const transactionReceiptData = this.getTransactionSummary(transactionResponse, transactionReceipt)
-    this.logger.debug('transactionReceiptData', transactionReceiptData)
 
     return transactionReceiptData
   }
@@ -160,7 +155,7 @@ export class WardenswapService {
       minDestAmount,
       this.ethersConnectService.botWalletAddress,
       NETWORK_CONSTANT[56].PARTNER_ID,
-      '000' // Mock data
+      '0'
     ]
 
     return defaultArgs
@@ -194,7 +189,7 @@ export class WardenswapService {
       minDestAmount,
       this.ethersConnectService.botWalletAddress,
       NETWORK_CONSTANT[56].PARTNER_ID,
-      '000' // Mock data, imprement in the future
+      '0'
     ]
 
     return defaultArgs
@@ -206,9 +201,7 @@ export class WardenswapService {
     args: Array<any>
   ): Promise<TransactionResponse | Error> {
     try {
-      console.log('args', JSON.stringify(args, null, 4))
       const estimatedGas = await this.utilsService.estimateGasForContract(contract, methodName, args)
-      this.logger.debug('callMehodTrade 2', estimatedGas)
       // Add gasLimit and gasPrice in last index of array
       if (typeof args[args.length - 1] === 'object') {
         args[args.length - 1].gasLimit = estimatedGas
@@ -238,8 +231,8 @@ export class WardenswapService {
     const txFeeInWei = new BigNumber(transactionReceipt.gasUsed.toString())
       .times(ethers.utils.parseUnits('5', 'gwei').toString())
       .toString()
+
     const txFeeInBase = utils.formatEther(txFeeInWei)
-    console.log('transactionReceipt', transactionReceipt)
     let tradeMethodName = ''
     try {
       const decodedInput = wardenRoutingInterface.parseTransaction({
