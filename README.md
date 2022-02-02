@@ -8,7 +8,7 @@ Here is the article of why I set this up and steps of how to use it. [Article](h
 
 ## Stack architecture
 
-I use Nest.js framework for Node.js server to connect to BSC chain by using library nestjs-ethers and using aws kms to manage wallet private key. You can use it easily by using the private key of the server directly (but I don’t recommend this way.) Please use PostgreSQL for collecting data, and use WardenSwap SDK for getting the token price via WardenSwap router contract for swapping token.
+I use Nest.js framework for Node.js server to connect to BSC chain by using library nestjs-ethers and using aws kms to manage wallet private key. You can use it easily by using the private key of the server directly (but I don’t recommend this way.) Use PostgreSQL for collecting data, and use WardenSwap SDK for getting the token price via WardenSwap router contract for swapping token.
 
 Please note that I’ll not demonstrate the AWS CLI, AWS KMS, PostgreSQL setting up process in this document.
 
@@ -31,7 +31,7 @@ $ yarn install
    - **Option 1** <br>
      Use AWS KMS (Recommend)<br>
      I use kms (Key Management Service) for encrypting wallet private key and store cipher text base64<br>`WALLET_ENCRYPT_BASE64` in `.env` file
-     when the server starts, the system uses cipher text base64 to decrypt the private key.<br><br>
+     when the server start, the system uses cipher text base64 to decrypt the private key.<br><br>
      Ref.
      [Managing Encryption Keys With AWS KMS In Node.js](https://medium.com/hackernoon/managing-encryption-keys-with-aws-kms-in-node-js-c320c860019a)
 
@@ -137,11 +137,6 @@ If you discover a security vulnerability, please send us an e-mail at <ruby.red.
 ## Special thanks
 
 - [MagicDream](https://github.com/MagicDream01), article editor
-
-## Contributors
-<a href="https://github.com/RubyRedOwl08/defi-trading-bot/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=defi-trading-bot" />
-</a>
 
 ## License
 
