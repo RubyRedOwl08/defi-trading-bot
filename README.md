@@ -139,3 +139,7 @@ If you discover a security vulnerability, please send us an e-mail at <ruby.red.
 - [MagicDream](https://github.com/MagicDream01), article editor
 
 ## License
+
+defi-trading-Bot is licensed under the MIT license.
+
+See [LICENSE](https://github.com/RubyRedOwl08/defi-trading-bot/blob/main/LICENSE) for the full license text.
