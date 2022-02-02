@@ -138,6 +138,11 @@ If you discover a security vulnerability, please send us an e-mail at <ruby.red.
 
 - [MagicDream](https://github.com/MagicDream01), article editor
 
+## Contributors
+<a href="https://github.com/RubyRedOwl08/defi-trading-bot/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=defi-trading-bot" />
+</a>
+
 ## License
 
 defi-trading-Bot is licensed under the MIT license.
