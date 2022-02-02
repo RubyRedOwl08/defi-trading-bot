@@ -6,6 +6,7 @@ Here is the article of why I set this up and steps of how to use it. [Article](h
 
 ---
 
+
 ## Stack architecture
 
 I use Nest.js framework for Node.js server to connect to BSC chain by using library nestjs-ethers and using aws kms to manage wallet private key. You can use it easily by using the private key of the server directly (but I don’t recommend this way.) Please use PostgreSQL for collecting data, and use WardenSwap SDK for getting the token price via WardenSwap router contract for swapping token.
@@ -14,7 +15,7 @@ Please note that I’ll not demonstrate the AWS CLI, AWS KMS, PostgreSQL setting
 
 ## Prerequisites
 
-Please make sure that Node.js >V14.0 is installed on your operating system.
+Please make sure that Node.js > v14.0.0 is installed on your operating system.
 
 ## Installation
 
@@ -38,11 +39,11 @@ $ yarn install
       Open `.env` file to set `USE_WALLET_TYPE=ENCRYPT_BASE64`, `AWS_KMS_KEY_ID`,`AWS_CREDENTIAL_PROFILE_NAME`, `WALLET_PRIVATE_KEY_FOR_ENCRYPTION`<br>
       For running script encryption, temporarily put wallet private key in this process.
      - **Step 2**<br>
-         run `yarn encryptionPrivateKey` script. When encryption is done, search for `resultFromScripts/encryptData.txt` path folder. Input data with .env template. The key is  `WALLET_ENCRYPT_BASE64`<br>
+         run `yarn encryptionPrivateKey` script. When encryption is done, search for `resultFromScripts/encryptData.txt` path folder. Input data with .env file. The key is  `WALLET_ENCRYPT_BASE64`<br>
      - **Step 3**<br>
          Remove key and value `WALLET_PRIVATE_KEY_FOR_ENCRYPTION`
    - **Option2**<br>
-     Set `USE_WALLET_TYPE=PRIVATE_KEY` and WALLET_PRIVATE_KEY for instant use.
+     Set `USE_WALLET_TYPE=PRIVATE_KEY` and `WALLET_PRIVATE_KEY` for instant use.
 
 
 4. Create PostgreSQL database name `defi-trading-bot-manager`
@@ -69,12 +70,12 @@ $ yarn start:prod
 | POSTGRES_HOST             |  PostgreSQL host name|                                                                                                                        |
 | POSTGRES_PORT               |  PostgreSQL TCP port|                                                                                                                        |
 | POSTGRES_USERNAME           | PostgreSQL username |                                                                                                                        |
-| POSTGRES_PASSWORD   | Password for PostgreSQL        |                                                                                                                        |
+| POSTGRES_PASSWORD   | PostgreSQL password       |                                                                                                                        |
 | POSTGRES_DATABASE   | PostgreSQL database name        |                                                                                                                        |
 | POSTGRES_AUTO_LOAD_ENTITIES | If true, models will be loaded automatically.|                                                                                                                        |
 | POSTGRES_SYNCHRONIZE        | If ```true```, automatically loaded models will be synchronized.|                                                                                                                        |
 | AWS_CREDENTIAL_PROFILE_NAME | AWS CLI profile name                                                                                                   |
-| AWS_KMS_KEY_ID              | AWS KMS keyid for encryption and decryption                                                                            |
+| AWS_KMS_KEY_ID              | AWS KMS key ID for encryption and decryption                                                                            |
 
 <br><br>
 ## REST API
@@ -102,7 +103,7 @@ $ yarn start:prod
 
 | Name    | Type   | In   | Description                     |
 | ------- | ------ | ---- | ------------------------------- |
-| orderId | string | path | Get orderbook data from orderId |
+| orderId | string | path | Get orderbook data from order ID |
 
 ## `PATCH` /orderbook/{orderId}/cancel
 
@@ -110,7 +111,7 @@ $ yarn start:prod
 
 | Name    | Type   | In   | Description               |
 | ------- | ------ | ---- | ------------------------- |
-| orderId | string | path | Cancle order form orderId |
+| orderId | string | path | Cancle order form order ID |
 
 ## `GET` /wardenswap/current-price
 **Get the current price**
@@ -120,13 +121,14 @@ $ yarn start:prod
 | srcTokenAddress  | string | query | Source token address to swap         |
 | destTokenAddress | string | query | Destination token address to receive |
 | srcAmount        | string | query | Amount of source token to swap       |
+
+<br>
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability, please send us an e-mail at <ruby.red.owl.08@gmail.com>
 
 ## Special thanks
-
-Pseudonym<br>
 * [MagicDream](https://github.com/MagicDream01), article editor
 
 ## License
