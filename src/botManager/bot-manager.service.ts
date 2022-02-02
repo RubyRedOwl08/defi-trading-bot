@@ -158,7 +158,7 @@ export class BotManagerService {
       )
 
       if (new BigNumber(srcAmountInWei).gt(srcTokenBalanceInWei)) {
-        throw new Error(`Token ${srcTokenData.symbol} balance not enough`)
+        throw new Error(`Insufficient of ${srcTokenData.symbol} token in the wallet`)
       }
 
       const transactionReceiptData = await this.wardenSwapServeice.tradeToken(

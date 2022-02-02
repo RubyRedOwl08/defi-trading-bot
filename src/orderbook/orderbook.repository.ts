@@ -30,7 +30,7 @@ export class OrderbookRepository extends Repository<OrderbookEntity> {
     const found = this.findOne(id)
 
     if (!found) {
-      throw new NotFoundException(`Orderbook with Id ${id} not found`)
+      throw new NotFoundException(`${id} order Book is not found.`)
     }
 
     return found

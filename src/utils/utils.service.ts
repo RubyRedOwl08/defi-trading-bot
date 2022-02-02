@@ -75,7 +75,7 @@ export class UtilsService {
     const amountOutInWei = bestRateResult.amountOut.toString()
     if (new BigNumber(amountOutInWei).isZero() || new BigNumber(amountOutInWei).isNaN()) {
       const tokenPairText = srcTokenSymbol && destTokenSymbol ? ` ${srcTokenSymbol}-${destTokenSymbol} ` : ' '
-      throw new NotFoundException(`Swap pair${tokenPairText}no liquidity`)
+      throw new NotFoundException(`Not enough liquidity for ${tokenPairText} swapping pairs.`)
     }
   }
 }

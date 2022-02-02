@@ -103,7 +103,7 @@ export class EthersConnectService implements OnModuleInit {
         break
       }
       default:
-        throw new NotFoundException(`Generate wallet type ${genWalletType} not support.`)
+        throw new NotFoundException(`The system does not support ${genWalletType} wallet type.`)
     }
     const wallet = this.getWallet(tempFile.walletPrivateKey)
 

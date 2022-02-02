@@ -1,8 +1,14 @@
 ## Introduction
 
-This is simple project bot for swap cryptocurrency on decentralized exchange on binance smart chain
+This is the bot project for trading cryptocurrency on decentralized exchange on bsc chain
 
-You can read my article for reason [Aricle](https://)
+Here is the article of why I set this up and steps of how to use it. [Article](https://)
+
+## Stack architecture
+
+I use NestJs framework for the Node.js server to connect to the BSC chain by liberry nestjs-ethers and manage wallet private key by aws kms. You can use it easily by using the private key of the server directly (but I don’t recommend this way.) Please use PostgreSQL for collecting data, and use WardenSwap SDK for getting the token price while WardenSwap router contract for swapping token.
+
+For the process of setting up AWS CLI, AWS KMS, PostgreSQL, I’ll not explain here.
 
 ## Prerequisites
 
@@ -106,6 +112,8 @@ Crarte order book
 - test
 + test2
 ```
+
+## Special thanks
 
 ## License
 
