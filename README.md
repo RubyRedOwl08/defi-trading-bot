@@ -18,7 +18,7 @@ Please make sure that Node.js >V14.0 is installed on your operating system.
 
 ## Installation
 
-1. Install node module
+1. Install all dependencies
 
 ```bash
 $ yarn install
@@ -32,13 +32,14 @@ $ yarn install
    I use kms (Key Management Service) for encrypting wallet private key and store cipher text base64<br>`WALLET_ENCRYPT_BASE64` in `.env` file
    when the server starts, the system uses cipher text base64 to decrypt the private key.<br><br>
    Ref.
-   [https://medium.com/hackernoon/managing-encryption-keys-with-aws-kms-in-node-js-c320c860019a](https://medium.com/hackernoon/managing-encryption-keys-with-aws-kms-in-node-js-c320c860019a)
-     - Step 1<br>
+   [Managing Encryption Keys With AWS KMS In Node.js](https://medium.com/hackernoon/managing-encryption-keys-with-aws-kms-in-node-js-c320c860019a)
+
+     - **Step 1**<br>
       Open `.env` file to set `USE_WALLET_TYPE=ENCRYPT_BASE64`, `AWS_KMS_KEY_ID`,`AWS_CREDENTIAL_PROFILE_NAME`, `WALLET_PRIVATE_KEY_FOR_ENCRYPTION`<br>
       For running script encryption, temporarily put wallet private key in this process.
-     - Step 2<br>
+     - **Step 2**<br>
          run `yarn encryptionPrivateKey` script. When encryption is done, search for `resultFromScripts/encryptData.txt` path folder. Input data with .env template. The key is  `WALLET_ENCRYPT_BASE64`<br>
-     - Step 3<br>
+     - **Step 3**<br>
          Remove key and value `WALLET_PRIVATE_KEY_FOR_ENCRYPTION`
    - **Option2**<br>
      Set `USE_WALLET_TYPE=PRIVATE_KEY` and WALLET_PRIVATE_KEY for instant use.
@@ -65,23 +66,21 @@ $ yarn start:prod
 | USE_WALLET_TYPE             | Access wallet with private key or encryption data, You can choose to enter 2 values. `ENCRYPT_BASE64` or `PRIVATE_KEY` |
 | WALLET_PRIVATE_KEY          | Private key of wallet                                                                                                  |
 | WALLET_ENCRYPT_BASE64       | Encryption private key from aws kms                                                                                    |
-| POSTGRES_HOST               |                                                                                                                        |
-| POSTGRES_PORT               |                                                                                                                        |
-| POSTGRES_USERNAME           |                                                                                                                        |
-| POSTGRES_PASSWORD           |                                                                                                                        |
-| POSTGRES_DATABASE           |                                                                                                                        |
-| POSTGRES_AUTO_LOAD_ENTITIES |                                                                                                                        |
-| POSTGRES_SYNCHRONIZE        |                                                                                                                        |
+| POSTGRES_HOST             |  PostgreSQL host name|                                                                                                                        |
+| POSTGRES_PORT               |  PostgreSQL TCP port|                                                                                                                        |
+| POSTGRES_USERNAME           | PostgreSQL username |                                                                                                                        |
+| POSTGRES_PASSWORD   | Password for PostgreSQL        |                                                                                                                        |
+| POSTGRES_DATABASE   | PostgreSQL database name        |                                                                                                                        |
+| POSTGRES_AUTO_LOAD_ENTITIES | If true, models will be loaded automatically.|                                                                                                                        |
+| POSTGRES_SYNCHRONIZE        | If ```true```, automatically loaded models will be synchronized.|                                                                                                                        |
 | AWS_CREDENTIAL_PROFILE_NAME | AWS CLI profile name                                                                                                   |
 | AWS_KMS_KEY_ID              | AWS KMS keyid for encryption and decryption                                                                            |
 
-
-
-
-
+<br><br>
+## REST API
 ## `POST` /orderbook
 
-Create order book
+**Create order trade**
 
 | Name             | Type   | In   | Description                          |
 | ---------------- | ------ | ---- | ------------------------------------ |
@@ -92,32 +91,35 @@ Create order book
 | stopPrice        | string | body | The price in a stop order that triggers the creation of a market order                                     |
 
 ## `GET` /orderbook
+**List all orderbook**
 
 | Name        | Type   | In    | Description |
 | ----------- | ------ | ----- | ----------- |
-| orderStatus | string | query |             |
+| orderStatus | string | query | Status of orderbook            |
 
 ## `GET` /orderbook/{orderId}
+**Get orderbook by order ID**
 
 | Name    | Type   | In   | Description                     |
 | ------- | ------ | ---- | ------------------------------- |
 | orderId | string | path | Get orderbook data from orderId |
 
-## `GET` /wardenswap/price-swap
+## `PATCH` /orderbook/{orderId}/cancel
+
+**Cancel an active order**
+
+| Name    | Type   | In   | Description               |
+| ------- | ------ | ---- | ------------------------- |
+| orderId | string | path | Cancle order form orderId |
+
+## `GET` /wardenswap/current-price
+**Get the current price**
 
 | Name             | Type   | In    | Description                          |
 | ---------------- | ------ | ----- | ------------------------------------ |
 | srcTokenAddress  | string | query | Source token address to swap         |
 | destTokenAddress | string | query | Destination token address to receive |
 | srcAmount        | string | query | Amount of source token to swap       |
-
-## `PATCH` /orderbook/{orderId}/cancel
-
-| Name    | Type   | In   | Description               |
-| ------- | ------ | ---- | ------------------------- |
-| orderId | string | path | Cancle order form orderId |
-
-
 ## Security Vulnerabilities
 
 If you discover a security vulnerability, please send us an e-mail at <ruby.red.owl.08@gmail.com>
