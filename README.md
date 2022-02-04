@@ -2,7 +2,7 @@
 
 This is a mini DeFi trading Bot project on decentralized exchange operating on BSC chain.
 
-Here is the article of why I set this up and steps of how to use it. [Article](https://)
+Here is the article of why I set this up and steps of how to use it. 👉&nbsp; [Article]([https://](https://medium.com/@ruby.red.owl.08/lets-build-a-defi-trading-bot-with-nest-js-4ae644f89c56))
 
 ---
 
