@@ -36,7 +36,7 @@ $ yarn install
      [Managing Encryption Keys With AWS KMS In Node.js](https://medium.com/hackernoon/managing-encryption-keys-with-aws-kms-in-node-js-c320c860019a)
 
      - **Step 1**<br>
-       Open `.env` file to set `USE_WALLET_TYPE=ENCRYPT_BASE64`, `AWS_KMS_KEY_ID`,`AWS_CREDENTIAL_PROFILE_NAME`, `WALLET_PRIVATE_KEY_FOR_ENCRYPTION`<br>
+       Open `.env` file to set `USE_WALLET_TYPE=ENCRYPT_BASE64`, `AWS_REGION`, `AWS_KMS_KEY_ID`,`AWS_CREDENTIAL_PROFILE_NAME`, `WALLET_PRIVATE_KEY_FOR_ENCRYPTION`<br>
        For running script encryption, temporarily put wallet private key in this process.
      - **Step 2**<br>
        run `yarn encryptionPrivateKey` script. When encryption is done, search for `resultFromScripts/encryptData.txt` path folder. Input data with .env file. The key is `WALLET_ENCRYPT_BASE64`<br>
@@ -73,8 +73,9 @@ $ yarn start:prod
 | POSTGRES_USERNAME           | PostgreSQL username                                                                                                    |
 | POSTGRES_PASSWORD           | PostgreSQL password                                                                                                    |
 | POSTGRES_DATABASE           | PostgreSQL database name                                                                                               |
-| POSTGRES_AUTO_LOAD_ENTITIES | If `true`, models will be loaded automatically.                                                                          |
+| POSTGRES_AUTO_LOAD_ENTITIES | If `true`, models will be loaded automatically.                                                                        |
 | POSTGRES_SYNCHRONIZE        | If `true`, automatically loaded models will be synchronized.                                                           |
+| AWS_REGION                  | AWS Region                                                                                                             |
 | AWS_CREDENTIAL_PROFILE_NAME | AWS CLI profile name                                                                                                   |
 | AWS_KMS_KEY_ID              | AWS KMS key ID for encryption and decryption                                                                           |
 
